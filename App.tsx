@@ -1,20 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import {View} from 'react-native';
+import {Provider as PaperProvider} from 'react-native-paper';
+import theme from './theme';
+import Browser from "./src/feats/browser/Browser";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+	return (
+		<PaperProvider theme={theme}>
+			<View style={{flex: 1}}>
+				<Browser/>
+			</View>
+		</PaperProvider>
+	);
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
