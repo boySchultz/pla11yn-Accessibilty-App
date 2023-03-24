@@ -1,41 +1,47 @@
 import React, { useState, useRef } from "react";
 import { WebView } from "react-native-webview";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
 import {
-  Appbar,
-  Button,
-  Drawer,
-  TextInput,
-  useTheme,
-} from "react-native-paper";
+  TouchableOpacity,
+  Animated,
+  PanResponder,
+  StyleSheet,
+  View,
+} from "react-native";
+import { Appbar, Button } from "react-native-paper";
+import { SearchBar } from "./SearchBar";
+import { A11lySettings } from "../settings/A11lySettings";
 import theme from "../../../theme";
-import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
-import { Animated } from "react-native";
+
 const Browser = () => {
-  const theme = useTheme();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
-  const [inputText, setInputText] = useState(url);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const webViewRef = useRef<WebView | null>(null);
 
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
-
-  const handleSearch = (searchText: string) => {
-    if (isValidURL(searchText)) {
-      if (!searchText.match(/^https?:\/\//i)) {
-        searchText = `https://www.${searchText}`;
-      }
-      setUrl(searchText);
-    } else {
-      const searchQuery = encodeURIComponent(searchText);
-      setUrl(`https://www.google.com/search?q=${searchQuery}`);
-    }
-  };
-
-  const isValidURL = (url: string) => {
-    const pattern =
-      /^(https?:\/\/)?([a-z0-9]+\.)?[a-z0-9]+\.[a-z]{2,}(\/.*)?$/i;
-    return pattern.test(url);
-  };
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: (evt, gestureState) => {
+        // Only allow dragging up from the bottom
+        return gestureState.dy < 0;
+      },
+      onPanResponderMove: (evt, gestureState) => {
+        // Update the bottomDrawerAnim based on the drag distance
+        bottomDrawerAnim.setValue(-gestureState.dy);
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        // If the drawer was not dragged more than 200px, open it
+        if (gestureState.dy > -200) {
+          Animated.spring(bottomDrawerAnim, {
+            toValue: 0,
+            useNativeDriver: false,
+          }).start();
+        } else {
+          // If the drawer was dragged more than 200px, close it
+          closeDrawer();
+        }
+      },
+    })
+  ).current;
 
   const openDrawer = () => {
     Animated.timing(bottomDrawerAnim, {
@@ -43,7 +49,7 @@ const Browser = () => {
       duration: 500,
       useNativeDriver: false,
     }).start();
-    setShowMenu(true);
+    setShowSettings(true);
   };
 
   const closeDrawer = () => {
@@ -51,31 +57,24 @@ const Browser = () => {
       toValue: 0,
       duration: 500,
       useNativeDriver: false,
-    }).start(() => setShowMenu(false));
+    }).start(() => setShowSettings(false));
   };
 
   return (
     <>
+      {/*Searchbar*/}
       <Appbar.Header>
-        <TouchableOpacity onPress={showMenu ? closeDrawer : openDrawer}>
+        <TouchableOpacity onPress={showSettings ? closeDrawer : openDrawer}>
           <Appbar.Action icon="menu" />
         </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          placeholder="Search or enter URL"
-          value={inputText}
-          onChangeText={(change) => setInputText(change)}
-        />
-        <Button
-          mode={"text"}
-          buttonColor={theme.colors.secondary}
-          onPress={() => handleSearch(inputText)}
-        >
-          Search
-        </Button>
+        <SearchBar setUrl={setUrl} url={url} />
       </Appbar.Header>
-      <WebView source={{ uri: url }} />
-      {showMenu && (
+
+      {/*WebView*/}
+      <WebView ref={webViewRef} source={{ uri: url }} />
+
+      {/*Settings*/}
+      {showSettings && (
         <Animated.View
           style={[
             styles.drawer,
@@ -85,26 +84,16 @@ const Browser = () => {
                   translateY: bottomDrawerAnim.interpolate({
                     inputRange: [0, 1],
                     outputRange: [200, 0],
+                    //clamp: if the input value goes beyond the specified inputRange, the output value will be clamped to the nearest output range value.
+                    // extrapolate: 'clamp',
                   }),
                 },
               ],
             },
           ]}
+          {...panResponder.panHandlers}
         >
-          <DrawerContentScrollView>
-            <Drawer.Section>
-              <DrawerItem
-                label="Increase font size"
-                onPress={() => console.log("Increasing font size")}
-                labelStyle={{ color: theme.colors.primary }}
-              />
-              <DrawerItem
-                label="Decrease font size"
-                onPress={() => console.log("Decreasing font size")}
-                labelStyle={{ color: theme.colors.primary }}
-              />
-            </Drawer.Section>
-          </DrawerContentScrollView>
+          <A11lySettings webViewRef={webViewRef} />
           <View style={{ padding: 16 }}>
             <Button onPress={closeDrawer}>Close Menu</Button>
           </View>
@@ -115,10 +104,6 @@ const Browser = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  },
   drawer: {
     color: theme.colors.primary,
     backgroundColor: theme.colors.secondary,
@@ -128,17 +113,5 @@ const styles = StyleSheet.create({
     right: 0,
     height: 400,
   },
-  input: {
-    backgroundColor: theme.colors.background,
-    flex: 1,
-    height: 40,
-    marginHorizontal: 10,
-    paddingHorizontal: 10,
-  },
-  webview: {
-    flex: 1,
-    marginTop: 0,
-  },
 });
-
 export default Browser;
