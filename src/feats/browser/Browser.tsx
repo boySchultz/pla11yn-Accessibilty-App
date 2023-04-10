@@ -85,7 +85,7 @@ const Browser = () => {
                     inputRange: [0, 1],
                     outputRange: [200, 0],
                     //clamp: if the input value goes beyond the specified inputRange, the output value will be clamped to the nearest output range value.
-                    // extrapolate: 'clamp',
+                    extrapolate: "clamp",
                   }),
                 },
               ],

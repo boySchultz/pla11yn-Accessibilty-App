@@ -55,13 +55,29 @@ export const changeTextJustification = (
 //sets mins according to wcag AA for text spacing
 export const setWordSpacing = (
   ref: React.MutableRefObject<WebView | null>,
-  sizeFactor = 0.16
+  steps: number = 0
 ) => {
+  const sizeFactor = (steps: number) => {
+    console.log("steps", steps);
+    switch (steps) {
+      case 0:
+        //todo: reset to initial value
+        return 0.1;
+      case 1:
+        return 0.16;
+      case 2:
+        return 0.3;
+      case 3:
+        return 0.8;
+    }
+  };
+  const factor = sizeFactor(steps);
+  console.log("factor", factor);
   // Word spacing to at least 0.16 times the font size:
   ref.current?.injectJavaScript(`
       var body = document.body;
       var currentFontSize = parseFloat(window.getComputedStyle(body).fontSize);
-      body.style.wordSpacing = (${sizeFactor} * currentFontSize) + 'px';
+      body.style.wordSpacing = (${factor} * currentFontSize) + 'px';
     `);
 };
 

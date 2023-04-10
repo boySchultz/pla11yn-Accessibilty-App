@@ -1,44 +1,53 @@
-import { View } from "react-native";
-import { useTheme } from "react-native-paper";
-import { DrawerItem } from "@react-navigation/drawer";
+import { View, StyleSheet, FlatList } from "react-native";
 import React, { MutableRefObject } from "react";
-import { changeZoom, setWordSpacing, setLetterSpacing, setParagraphSpacing, setLineHeight, } from "./a11yMethods";
 import { WebView } from "react-native-webview";
+import { SettingsTile } from "./components/SettingsTile";
+import { settingsConfig, AllySetting } from "./settingsConfig";
 
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
 export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
-  const theme = useTheme();
-  return (
-    <>
-      <View>
-        <DrawerItem
-          label="setWordSpacing"
-          onPress={() => setWordSpacing(webViewRef)}
-          labelStyle={{ color: theme.colors.primary }}
-        />
-        <DrawerItem
-          label="setLetterSpacing"
-          onPress={() => setLetterSpacing(webViewRef)}
-          labelStyle={{ color: theme.colors.primary }}
-        />
-        <DrawerItem
-          label="setParagraphSpacing"
-          onPress={() => setParagraphSpacing(webViewRef)}
-          labelStyle={{ color: theme.colors.primary }}
-        />
-        <DrawerItem
-          label="setLineHeight"
-          onPress={() => setLineHeight(webViewRef)}
-          labelStyle={{ color: theme.colors.primary }}
-        />
-        <DrawerItem
-          label="CHANGE ZOOM"
-          onPress={() => changeZoom(webViewRef, 0.1)}
-          labelStyle={{ color: theme.colors.primary }}
+  // const theme = useTheme();
+  const renderSettings = ({onPress, title, steps}: any) => {
+    return (
+      <View style={styles.itemContainer}>
+        <SettingsTile
+          webViewRef={webViewRef}
+          onPress={onPress}
+          title={title}
+          steps={steps}
         />
       </View>
-    </>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={settingsConfig}
+        numColumns={3} // number of columns you want in the grid
+        renderItem={renderSettings}
+        columnWrapperStyle={styles.row} // Apply styles to each row
+        keyExtractor={(item) => item.key}
+      />
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+  },
+  row: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  itemContainer: {
+    flex: 1,
+    margin: 8, // Add margin around each item
+    minWidth: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
+  },
+});
