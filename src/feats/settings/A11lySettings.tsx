@@ -9,7 +9,7 @@ interface A11lySettingsProps {
 }
 export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
   // const theme = useTheme();
-  const renderSettings = ({onPress, title, steps}: any) => {
+  const renderSettings = ({ onPress, title, steps }: any) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
