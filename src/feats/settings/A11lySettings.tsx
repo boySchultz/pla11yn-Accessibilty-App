@@ -8,7 +8,6 @@ interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
 export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
-  // const theme = useTheme();
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
@@ -26,7 +25,7 @@ export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
     <View style={styles.container}>
       <FlatList
         data={settingsConfig}
-        numColumns={3} // number of columns you want in the grid
+        numColumns={2} // number of columns you want in the grid
         renderItem={renderSettings}
         columnWrapperStyle={styles.row} // Apply styles to each row
         keyExtractor={(item) => item.key}

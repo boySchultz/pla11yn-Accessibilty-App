@@ -34,7 +34,8 @@ export const Stepper = ({
           key={index}
           style={[
             styles.circle,
-            index + 1 === activeStep ? styles.activeCircle : null,
+            index == steps - 1 && styles.lastCircle,
+            index + 1 === activeStep && styles.activeCircle,
           ]}
         />
       ))}
@@ -59,16 +60,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingHorizontal: 10,
-    marginVertical: 20,
+
   },
   circle: {
-    width: 10,
-    height: 10,
-    borderRadius: 10,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
     borderWidth: 2,
     borderColor: "#000",
+    marginRight: 4,
   },
+  lastCircle:{marginRight:0},
   activeCircle: {
     backgroundColor: "#000",
   },
