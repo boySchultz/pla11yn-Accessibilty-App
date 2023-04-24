@@ -2,21 +2,21 @@ import { View, StyleSheet, FlatList } from "react-native";
 import React, { MutableRefObject } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
-import { settingsConfig, AllySetting } from "./settingsConfig";
+import { settingsConfig } from "./settingsConfig";
 
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
 export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
   // const theme = useTheme();
-  const renderSettings = ({ onPress, title, steps }: any) => {
+  const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
           webViewRef={webViewRef}
-          onPress={onPress}
-          title={title}
-          steps={steps}
+          onPress={item.onPress}
+          title={item.title}
+          steps={item.steps}
         />
       </View>
     );
