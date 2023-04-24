@@ -25,7 +25,7 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   const isValidURL = (url: string) => {
     const pattern =
-      /^(https?:\/\/)?([a-z0-9]+\.)?[a-z0-9]+\.[a-z]{2,}(\/.*)?$/i;
+      /^(https?:\/\/)?([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}(\/.*)?$/i;
     return pattern.test(url);
   };
   return (
