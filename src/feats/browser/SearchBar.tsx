@@ -2,6 +2,7 @@ import { TextInput, Button } from "react-native-paper";
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import theme from "../../../theme";
+import { handleSearch } from "./utils/urlHelpers";
 
 interface SearchBarProps {
   url: string;
@@ -11,23 +12,6 @@ interface SearchBarProps {
 export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
   const [inputText, setInputText] = useState(url);
 
-  const handleSearch = (searchText: string) => {
-    if (isValidURL(searchText)) {
-      if (!searchText.match(/^https?:\/\//i)) {
-        searchText = `https://www.${searchText}`;
-      }
-      setUrl(searchText);
-    } else {
-      const searchQuery = encodeURIComponent(searchText);
-      setUrl(`https://www.google.com/search?q=${searchQuery}`);
-    }
-  };
-
-  const isValidURL = (url: string) => {
-    const pattern =
-      /^(https?:\/\/)?([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}(\/.*)?$/i;
-    return pattern.test(url);
-  };
   return (
     <>
       <TextInput
@@ -39,7 +23,7 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
       <Button
         mode={"text"}
         buttonColor={theme.colors.secondary}
-        onPress={() => handleSearch(inputText)}
+        onPress={() => handleSearch(inputText, setUrl)}
       >
         Search
       </Button>
