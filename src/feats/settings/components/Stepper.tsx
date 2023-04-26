@@ -18,7 +18,6 @@ export const Stepper = ({
 }: StepperProps) => {
   return (
     <View style={styles.container}>
-      {activeStep !== 0}
       <IconButton
         icon={({ size, color }) => (
           <MaterialCommunityIcons
@@ -57,7 +56,6 @@ export const Stepper = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.background,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
