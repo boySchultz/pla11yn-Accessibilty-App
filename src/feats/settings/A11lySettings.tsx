@@ -3,6 +3,7 @@ import React, { MutableRefObject } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
 import { settingsConfig } from "./settingsConfig";
+import theme from "../../../theme";
 
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
@@ -36,6 +37,7 @@ export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.background,
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -48,5 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 8, // Add margin around each item
     minWidth: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
+    minHeight: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
   },
 });

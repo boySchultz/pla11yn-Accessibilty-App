@@ -18,12 +18,13 @@ export const Stepper = ({
 }: StepperProps) => {
   return (
     <View style={styles.container}>
+      {activeStep !== 0}
       <IconButton
         icon={({ size, color }) => (
           <MaterialCommunityIcons
             name="chevron-left"
             size={size}
-            color={color}
+            color={activeStep === 0 ? theme.colors.background : color}
           />
         )}
         onPress={() => onBack()}
@@ -44,7 +45,7 @@ export const Stepper = ({
           <MaterialCommunityIcons
             name="chevron-right"
             size={size}
-            color={color}
+            color={activeStep === steps ? theme.colors.background : color}
           />
         )}
         onPress={() => onNext()}
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-
   },
   circle: {
     width: 16,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     marginRight: 4,
   },
-  lastCircle:{marginRight:0},
+  lastCircle: { marginRight: 0 },
   activeCircle: {
     backgroundColor: "#000",
   },
