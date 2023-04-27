@@ -2,21 +2,21 @@ import { View, StyleSheet, FlatList } from "react-native";
 import React, { MutableRefObject } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
-import { settingsConfig, AllySetting } from "./settingsConfig";
+import { settingsConfig } from "./settingsConfig";
+import theme from "../../../theme";
 
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
 export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
-  // const theme = useTheme();
-  const renderSettings = ({onPress, title, steps}: any) => {
+  const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
           webViewRef={webViewRef}
-          onPress={onPress}
-          title={title}
-          steps={steps}
+          onPress={item.onPress}
+          title={item.title}
+          steps={item.steps}
         />
       </View>
     );
@@ -26,7 +26,7 @@ export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
     <View style={styles.container}>
       <FlatList
         data={settingsConfig}
-        numColumns={3} // number of columns you want in the grid
+        numColumns={2} // number of columns you want in the grid
         renderItem={renderSettings}
         columnWrapperStyle={styles.row} // Apply styles to each row
         keyExtractor={(item) => item.key}
@@ -37,6 +37,7 @@ export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: theme.colors.background,
     flex: 1,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -49,5 +50,6 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 8, // Add margin around each item
     minWidth: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
+    minHeight: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
   },
 });

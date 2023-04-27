@@ -1,5 +1,5 @@
 import React, { useState, MutableRefObject } from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
 
@@ -9,6 +9,7 @@ interface SettingsTileProps {
   title: string;
   steps: number;
 }
+
 export const SettingsTile = ({
   title,
   onPress,
@@ -30,8 +31,11 @@ export const SettingsTile = ({
   };
 
   return (
-    <TouchableOpacity onPress={() => handleNext()}>
-      <Text>{title}</Text>
+    <TouchableOpacity
+      style={{ ...styles.container, borderWidth: activeStep === 0 ? 2 : 4 }}
+      onPress={() => handleNext()}
+    >
+      <Text style={styles.text}>{title}</Text>
       <Stepper
         steps={steps}
         activeStep={activeStep}
@@ -41,3 +45,20 @@ export const SettingsTile = ({
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderColor: "#000",
+    borderRadius: 10, // adjust the value to your liking
+  },
+  text: {
+    fontWeight:'bold',
+    padding: 8,
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0.7,
+  },
+});
