@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 10, // adjust the value to your liking
   },
   text: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     padding: 8,
     fontSize: 16,
     lineHeight: 24,

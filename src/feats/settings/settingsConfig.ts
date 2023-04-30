@@ -23,13 +23,13 @@ export const settingsConfig: AllySetting[] = [
     key: "2",
     onPress: setWordSpacing,
     title: "setWordSpacing",
-    steps: 3,
+    steps: 4,
   },
   {
     key: "3",
     onPress: setWordSpacing,
     title: "setWordSpacing",
-    steps: 3,
+    steps: 2,
   },
   {
     key: "4",
