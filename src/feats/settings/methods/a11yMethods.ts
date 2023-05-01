@@ -51,17 +51,17 @@ export const changeTextJustification = (
 };
 //endregion
 
-//region =SC 1.4.12:Text Spacing (Level AA)
+//region SC 1.4.12:Text Spacing (Level AA)
 //sets mins according to wcag AA for text spacing
 export const setWordSpacing = (
   ref: React.MutableRefObject<WebView | null>,
   steps: number = 0
 ) => {
   const sizeFactor = (steps: number) => {
-    console.log("steps", steps);
+    // console.log("steps", steps);
     switch (steps) {
+        //todo: remove 0 case and and reset value directly in inject method
       case 0:
-        //todo: reset to initial value
         return 0.1;
       case 1:
         return 0.16;
@@ -71,8 +71,11 @@ export const setWordSpacing = (
         return 0.8;
     }
   };
+
   const factor = sizeFactor(steps);
-  console.log("factor", factor);
+
+  //todo: if (step === 0) else: set wordSpacing to stored Value for wordSpacing
+
   // Word spacing to at least 0.16 times the font size:
   ref.current?.injectJavaScript(`
       var body = document.body;
