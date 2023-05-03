@@ -14,17 +14,47 @@ const removeSetting = (store: AllyStore, settingsKey: string) => {
     settings: store.settings.filter((s) => s.key !== settingsKey),
   };
 };
+
+const updateSetting = (store: AllyStore, update: SettingsState) => {
+  return {
+    settings: store.settings.map((currentSetting) => {
+      if (currentSetting.key !== update.key) return currentSetting;
+      return { ...currentSetting, update };
+    }),
+  };
+};
+
+const addSetting = (store: AllyStore, update: SettingsState) => {
+  return {
+    settings: [...store.settings, update],
+  };
+};
+
+const updateOrCreateEntry = (store: AllyStore, setting: SettingsState) => {
+  return !store.settings.find((s) => s.key === setting.key)
+    ? addSetting(store, setting)
+    : updateSetting(store, setting);
+};
 //endregion
 
 export const useStore = create<AllyStore>((set, get) => ({
   settings: [] as SettingsState[],
+
   getAllSettings: () => get().settings,
-  getSettingByKey: (partialSetting) =>
-    partialSetting.key ? getSetting(get(), partialSetting.key) : undefined,
+  getSettingByKey: (partialSetting) => {
+    return partialSetting.key
+      ? getSetting(get(), partialSetting.key)
+      : undefined;
+  },
+
   removeAllSettings: () => set(() => removeAllSettingsFromState()),
-  removeSettingByKey: (partialSetting) =>
+  removeSettingByKey: (partialSetting) => {
     set((state) =>
       partialSetting.key ? removeSetting(state, partialSetting.key) : state
-    ),
-  writeSetting: () => {},
+    );
+  },
+
+  writeSetting: (setting) => {
+    set((state) => updateOrCreateEntry(state, setting));
+  },
 }));
