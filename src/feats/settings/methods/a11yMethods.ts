@@ -60,7 +60,7 @@ export const setWordSpacing = (
   const sizeFactor = (steps: number) => {
     // console.log("steps", steps);
     switch (steps) {
-        //todo: remove 0 case and and reset value directly in inject method
+      //todo: remove 0 case and and reset value directly in inject method
       case 0:
         return 0.1;
       case 1:
