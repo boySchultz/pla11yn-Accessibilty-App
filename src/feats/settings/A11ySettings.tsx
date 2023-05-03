@@ -8,7 +8,7 @@ import theme from "../../../theme";
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
-export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
+export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>

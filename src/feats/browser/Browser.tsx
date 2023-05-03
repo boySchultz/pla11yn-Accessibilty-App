@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
-import { A11lySettings } from "../settings/A11lySettings";
+import { A11ySettings } from "../settings/A11ySettings";
 import theme from "../../../theme";
 
 const Browser = () => {
@@ -93,7 +93,7 @@ const Browser = () => {
           ]}
           {...panResponder.panHandlers}
         >
-          <A11lySettings webViewRef={webViewRef} />
+          <A11ySettings webViewRef={webViewRef} />
           <View style={{ padding: 16 }}>
             <Button onPress={closeDrawer}>Close Menu</Button>
           </View>
