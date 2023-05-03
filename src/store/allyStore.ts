@@ -29,7 +29,6 @@ const addSetting = (store: AllyStore, update: SettingsState) => {
     settings: [...store.settings, update],
   };
 };
-
 const updateOrCreateEntry = (store: AllyStore, setting: SettingsState) => {
   return !store.settings.find((s) => s.key === setting.key)
     ? addSetting(store, setting)
