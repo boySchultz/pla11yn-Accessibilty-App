@@ -55,6 +55,6 @@ export const useStore = create<AllyStore>((set, get) => ({
   },
 
   writeSetting: (setting) => {
-    set((state) => updateOrCreateEntry(state, setting));
+    set((state) => updateOrCreateEntry(state, setting as SettingsState));
   },
 }));
