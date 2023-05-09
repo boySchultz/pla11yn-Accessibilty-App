@@ -4,11 +4,13 @@ import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
 import { settingsConfig } from "./settingsConfig";
 import theme from "../../../theme";
+import { useAllyStore } from "../../store/allyStore";
 
 interface A11lySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
 export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
+  const store = useAllyStore();
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>

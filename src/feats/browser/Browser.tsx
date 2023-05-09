@@ -71,7 +71,16 @@ const Browser = () => {
       </Appbar.Header>
 
       {/*WebView*/}
-      <WebView ref={webViewRef} source={{ uri: url }} />
+      <WebView
+        ref={webViewRef}
+        source={{ uri: url }}
+        onMessage={(event) =>
+          console.log(
+            "event.nativeEvent.data",
+            JSON.parse(event.nativeEvent.data)
+          )
+        }
+      />
 
       {/*Settings*/}
       {showSettings && (

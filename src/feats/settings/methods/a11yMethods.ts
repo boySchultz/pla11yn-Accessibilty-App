@@ -38,7 +38,6 @@ export const changeFontSpacing = (
   ref.current?.injectJavaScript(`
       var body = document.body;
       var currentSpacing = parseFloat(window.getComputedStyle(body).letterSpacing);
-      console.log(currentSpacing);
       body.style.letterSpacing = (currentSpacing + ${amount}) + 'px';
     `);
 };
@@ -58,7 +57,6 @@ export const setWordSpacing = (
   steps: number = 0
 ) => {
   const sizeFactor = (steps: number) => {
-    // console.log("steps", steps);
     switch (steps) {
       //todo: remove 0 case and and reset value directly in inject method
       case 0:
@@ -75,11 +73,11 @@ export const setWordSpacing = (
   const factor = sizeFactor(steps);
 
   //todo: if (step === 0) else: set wordSpacing to stored Value for wordSpacing
-
   // Word spacing to at least 0.16 times the font size:
   ref.current?.injectJavaScript(`
       var body = document.body;
       var currentFontSize = parseFloat(window.getComputedStyle(body).fontSize);
+      window.ReactNativeWebView.postMessage(JSON.stringify({key:'font', value: currentFontSize}));
       body.style.wordSpacing = (${factor} * currentFontSize) + 'px';
     `);
 };

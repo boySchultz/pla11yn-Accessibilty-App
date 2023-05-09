@@ -29,14 +29,14 @@ const addSetting = (store: AllyStore, update: SettingsState) => {
     settings: [...store.settings, update],
   };
 };
-const updateOrCreateEntry = (store: AllyStore, setting: SettingsState) => {
+const updateOrCreateSetting = (store: AllyStore, setting: SettingsState) => {
   return !store.settings.find((s) => s.key === setting.key)
     ? addSetting(store, setting)
     : updateSetting(store, setting);
 };
 //endregion
 
-export const useStore = create<AllyStore>((set, get) => ({
+export const useAllyStore = create<AllyStore>((set, get) => ({
   settings: [] as SettingsState[],
 
   getAllSettings: () => get().settings,
@@ -54,6 +54,6 @@ export const useStore = create<AllyStore>((set, get) => ({
   },
 
   writeSetting: (setting) => {
-    set((state) => updateOrCreateEntry(state, setting as SettingsState));
+    set((state) => updateOrCreateSetting(state, setting as SettingsState));
   },
 }));
