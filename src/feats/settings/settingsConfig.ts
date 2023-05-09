@@ -4,10 +4,7 @@ import { WebView } from "react-native-webview";
 
 export interface AllySetting {
   key: string;
-  onPress: (
-    ref: React.MutableRefObject<WebView | null>,
-    steps?: number
-  ) => void;
+  onPress: (ref: React.MutableRefObject<WebView | null>, step?: number) => void;
   title: string;
   steps: number;
 }

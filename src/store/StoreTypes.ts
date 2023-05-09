@@ -1,6 +1,6 @@
 export type SettingsState = {
   key: string;
-  currentStep: number;
+  activeStep: number;
   initialValue: number;
 };
 

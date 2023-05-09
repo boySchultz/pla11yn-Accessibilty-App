@@ -1,33 +1,41 @@
-import React, { useState, MutableRefObject } from "react";
+import React, { MutableRefObject } from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
+import { useAllyStore } from "../../../store/allyStore";
 
 interface SettingsTileProps {
-  onPress: (ref: MutableRefObject<WebView | null>, sizeFactor?: number) => void;
+  onPress: (ref: MutableRefObject<WebView | null>, steps: number) => void;
   webViewRef: React.MutableRefObject<WebView | null>;
   title: string;
   steps: number;
+  settingsKey: string;
 }
 
 export const SettingsTile = ({
+  settingsKey,
   title,
   onPress,
   steps,
   webViewRef,
 }: SettingsTileProps) => {
-  const [activeStep, setActiveStep] = useState(0);
-  const handleNext = () => {
+  const { getSettingByKey, writeSetting } = useAllyStore();
+  const settings = getSettingByKey({ key: settingsKey});
+  const activeStep = settings?.activeStep ?? 0;
+	const handleNext = () => {
     onPress(webViewRef, activeStep);
-    setActiveStep(() => {
-      return activeStep === steps ? 0 : activeStep + 1;
+    writeSetting({
+      key: settingsKey,
+      activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
   };
 
   const handleBack = () => {
-    setActiveStep((activeStep) => {
-      return activeStep === 0 ? 0 : activeStep - 1;
-    });
+	  onPress(webViewRef, activeStep);
+	  writeSetting({
+		  key: settingsKey,
+		  activeStep: activeStep === 0 ? 0 : activeStep - 1,
+	  });
   };
 
   return (

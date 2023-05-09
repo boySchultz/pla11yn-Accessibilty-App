@@ -15,6 +15,7 @@ export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
+          settingsKey={item.key}
           webViewRef={webViewRef}
           onPress={item.onPress}
           title={item.title}

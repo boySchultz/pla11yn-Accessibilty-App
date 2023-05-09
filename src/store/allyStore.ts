@@ -16,20 +16,23 @@ const removeSetting = (store: AllyStore, settingsKey: string) => {
 };
 
 const updateSetting = (store: AllyStore, update: SettingsState) => {
+  console.log('update');
   return {
     settings: store.settings.map((currentSetting) => {
       if (currentSetting.key !== update.key) return currentSetting;
-      return { ...currentSetting, update };
+      return { ...currentSetting, ...update };
     }),
   };
 };
 
 const addSetting = (store: AllyStore, update: SettingsState) => {
+  console.log('add');
   return {
     settings: [...store.settings, update],
   };
 };
 const updateOrCreateSetting = (store: AllyStore, setting: SettingsState) => {
+  console.log('store', store.settings);
   return !store.settings.find((s) => s.key === setting.key)
     ? addSetting(store, setting)
     : updateSetting(store, setting);
