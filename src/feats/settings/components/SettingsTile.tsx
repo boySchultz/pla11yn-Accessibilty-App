@@ -3,9 +3,13 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
 import { useAllyStore } from "../../../store/allyStore";
+import { SettingsState } from "../../../store/StoreTypes";
 
 interface SettingsTileProps {
-  onPress: (ref: MutableRefObject<WebView | null>, steps: number) => void;
+  onPress: (
+    ref: MutableRefObject<WebView | null>,
+    settingsState: SettingsState | undefined
+  ) => void;
   webViewRef: React.MutableRefObject<WebView | null>;
   title: string;
   steps: number;
@@ -20,22 +24,22 @@ export const SettingsTile = ({
   webViewRef,
 }: SettingsTileProps) => {
   const { getSettingByKey, writeSetting } = useAllyStore();
-  const settings = getSettingByKey({ key: settingsKey});
-  const activeStep = settings?.activeStep ?? 0;
-	const handleNext = () => {
-    onPress(webViewRef, activeStep);
+  const settingsState = getSettingByKey({ settingsKey: settingsKey });
+  const activeStep = settingsState?.activeStep ?? 0;
+  const handleNext = () => {
+    onPress(webViewRef,settingsState);
     writeSetting({
-      key: settingsKey,
+      settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
   };
 
   const handleBack = () => {
-	  onPress(webViewRef, activeStep);
-	  writeSetting({
-		  key: settingsKey,
-		  activeStep: activeStep === 0 ? 0 : activeStep - 1,
-	  });
+    onPress(webViewRef, settingsState);
+    writeSetting({
+      settingsKey: settingsKey,
+      activeStep: activeStep === 0 ? 0 : activeStep - 1,
+    });
   };
 
   return (
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 8,
     borderColor: "#000",
-    borderRadius: 10, // adjust the value to your liking
+    borderRadius: 10,
   },
   text: {
     fontWeight: "bold",

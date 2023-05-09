@@ -3,7 +3,7 @@ import { AllyStore, SettingsState } from "./StoreTypes";
 
 //region utils
 const getSetting = (store: AllyStore, settingsKey: string) =>
-  store.settings.find((s) => s.key === settingsKey);
+  store.settings.find((s) => s.settingsKey === settingsKey);
 
 const removeAllSettingsFromState = () => {
   return { settings: [] };
@@ -11,29 +11,30 @@ const removeAllSettingsFromState = () => {
 
 const removeSetting = (store: AllyStore, settingsKey: string) => {
   return {
-    settings: store.settings.filter((s) => s.key !== settingsKey),
+    settings: store.settings.filter((s) => s.settingsKey !== settingsKey),
   };
 };
 
 const updateSetting = (store: AllyStore, update: SettingsState) => {
-  console.log('update');
+  console.log("update");
   return {
     settings: store.settings.map((currentSetting) => {
-      if (currentSetting.key !== update.key) return currentSetting;
+      if (currentSetting.settingsKey !== update.settingsKey)
+        return currentSetting;
       return { ...currentSetting, ...update };
     }),
   };
 };
 
 const addSetting = (store: AllyStore, update: SettingsState) => {
-  console.log('add');
+  console.log("add");
   return {
     settings: [...store.settings, update],
   };
 };
 const updateOrCreateSetting = (store: AllyStore, setting: SettingsState) => {
-  console.log('store', store.settings);
-  return !store.settings.find((s) => s.key === setting.key)
+  console.log("store", store.settings);
+  return !store.settings.find((s) => s.settingsKey === setting.settingsKey)
     ? addSetting(store, setting)
     : updateSetting(store, setting);
 };
@@ -44,15 +45,17 @@ export const useAllyStore = create<AllyStore>((set, get) => ({
 
   getAllSettings: () => get().settings,
   getSettingByKey: (partialSetting) => {
-    return partialSetting.key
-      ? getSetting(get(), partialSetting.key)
+    return partialSetting.settingsKey
+      ? getSetting(get(), partialSetting.settingsKey)
       : undefined;
   },
 
   removeAllSettings: () => set(() => removeAllSettingsFromState()),
   removeSettingByKey: (partialSetting) => {
     set((state) =>
-      partialSetting.key ? removeSetting(state, partialSetting.key) : state
+      partialSetting.settingsKey
+        ? removeSetting(state, partialSetting.settingsKey)
+        : state
     );
   },
 

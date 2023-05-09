@@ -1,5 +1,5 @@
 export type SettingsState = {
-  key: string;
+  settingsKey: string;
   activeStep: number;
   initialValue: number;
 };

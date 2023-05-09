@@ -1,35 +1,39 @@
 import { setWordSpacing } from "./methods/a11yMethods";
 import React from "react";
 import { WebView } from "react-native-webview";
+import { SettingsState } from "../../store/StoreTypes";
 
 export interface AllySetting {
-  key: string;
-  onPress: (ref: React.MutableRefObject<WebView | null>, step?: number) => void;
+  settingsKey: string;
+  onPress: (
+    ref: React.MutableRefObject<WebView | null>,
+    settingsState: SettingsState | undefined
+  ) => void;
   title: string;
   steps: number;
 }
 
 export const settingsConfig: AllySetting[] = [
   {
-    key: "setWordSpacing",
+    settingsKey: "setWordSpacing",
     onPress: setWordSpacing,
     title: "setWordSpacing",
     steps: 3,
   },
   {
-    key: "2",
+    settingsKey: "2",
     onPress: setWordSpacing,
     title: "setWordSpacing",
     steps: 4,
   },
   {
-    key: "3",
+    settingsKey: "3",
     onPress: setWordSpacing,
     title: "setWordSpacing",
     steps: 2,
   },
   {
-    key: "4",
+    settingsKey: "4",
     onPress: setWordSpacing,
     title: "setWordSpacing",
     steps: 3,

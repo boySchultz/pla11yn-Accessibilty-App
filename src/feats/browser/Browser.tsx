@@ -1,13 +1,21 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { TouchableOpacity, Animated, PanResponder, StyleSheet, View, } from "react-native";
+import {
+  TouchableOpacity,
+  Animated,
+  PanResponder,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { A11ySettings } from "../settings/A11ySettings";
 import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
+import { useAllyStore } from "../../store/allyStore";
 
 const Browser = () => {
+  const { writeSetting } = useAllyStore();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
@@ -57,8 +65,17 @@ const Browser = () => {
   };
   //endregion
 
+  //set initial value for settings
   const handleMessage = (event: WebViewMessageEvent) => {
-    const settingsState = JSON.parse(event.nativeEvent.data) as SettingsState;
+    const eventState = JSON.parse(
+      event.nativeEvent.data
+    ) as Partial<SettingsState>;
+    if (!eventState.initialValue) {
+      writeSetting({
+        initialValue: eventState.initialValue,
+        settingsKey: eventState.settingsKey,
+      });
+    }
   };
 
   return (
