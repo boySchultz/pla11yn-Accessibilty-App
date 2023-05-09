@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { WebView } from "react-native-webview";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
 import {
   TouchableOpacity,
   Animated,
@@ -11,12 +11,16 @@ import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { A11ySettings } from "../settings/A11ySettings";
 import theme from "../../../theme";
+import { useAllyStore } from "../../store/allyStore";
+import { SettingsState } from "../../store/StoreTypes";
 
 const Browser = () => {
+  const { writeSetting, getSettingByKey } = useAllyStore();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
 
+  //region drawer animation
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -59,6 +63,12 @@ const Browser = () => {
       useNativeDriver: false,
     }).start(() => setShowSettings(false));
   };
+  //endregion
+
+  const handleMessage = (event: WebViewMessageEvent) => {
+    const settingsState = JSON.parse(event.nativeEvent.data) as SettingsState
+    console.log("settingsState", settingsState);
+  };
 
   return (
     <>
@@ -74,12 +84,7 @@ const Browser = () => {
       <WebView
         ref={webViewRef}
         source={{ uri: url }}
-        onMessage={(event) =>
-          console.log(
-            "event.nativeEvent.data",
-            JSON.parse(event.nativeEvent.data)
-          )
-        }
+        onMessage={(event) => handleMessage(event)}
       />
 
       {/*Settings*/}
