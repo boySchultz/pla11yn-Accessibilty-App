@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
-import { A11ySettings } from "../settings/A11ySettings";
+import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
@@ -118,7 +118,7 @@ const Browser = () => {
           ]}
           {...panResponder.panHandlers}
         >
-          <A11ySettings webViewRef={webViewRef} />
+          <AllySettings webViewRef={webViewRef} />
           <View style={{ padding: 16 }}>
             <Button onPress={closeDrawer}>Close Menu</Button>
           </View>

@@ -5,10 +5,10 @@ import { SettingsTile } from "./components/SettingsTile";
 import { settingsConfig } from "./settingsConfig";
 import theme from "../../../theme";
 
-interface A11lySettingsProps {
+interface AllySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
-export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
+export const AllySettings = ({ webViewRef }: AllySettingsProps) => {
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>

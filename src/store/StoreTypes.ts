@@ -19,7 +19,7 @@ export type AllyStore = {
   getAllSettings: () => SettingsState[];
   /**
    * Retrieve setting by identifier.
-   * @param searchsettting specific ally setting.
+   * @param search specific ally setting.
    * @returns ally setting specified.
    */
   getSettingByKey: (
@@ -33,7 +33,7 @@ export type AllyStore = {
   writeSetting: (setting: Partial<SettingsState>) => void;
   /**
    * Remove a single setting from the store.
-   * @param settting Object to remove from store. This parameter is of the same type as the entries, but partial. Providing the identifying properties is enough.
+   * @param setting Object to remove from store. This parameter is of the same type as the entries, but partial. Providing the identifying properties is enough.
    */
   removeSettingByKey: (setting: Partial<SettingsState>) => void;
   /**

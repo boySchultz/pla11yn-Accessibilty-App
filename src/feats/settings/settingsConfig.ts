@@ -1,4 +1,4 @@
-import { setWordSpacing, setFontSize } from "./methods/a11yMethods";
+import { setWordSpacing, setFontSize } from "./methods/allyMethods";
 import React from "react";
 import { WebView } from "react-native-webview";
 import { SettingsState } from "../../store/StoreTypes";
