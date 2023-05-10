@@ -32,25 +32,25 @@ export const settingsConfig: AllySetting[] = [
 	{
 		settingsKey: 'setLineHeight',
 		onPress: setLineHeight,
-		title: 'setLineHeight',
-		steps: 3,
+		title: 'LineHeight',
+		steps: 2,
 	},
 	{
 		settingsKey: 'setParagraphHeight',
 		onPress: setParagraphHeight,
-		title: 'setFontSize',
+		title: 'ParagraphHeight',
 		steps: 3,
 	},
 	{
 		settingsKey: 'setLetterSpacing',
 		onPress: setLetterSpacing,
-		title: 'setLetterSpacing',
+		title: 'LetterSpacing',
 		steps: 3,
 	},
 	{
 		settingsKey: 'setWordSpacing',
 		onPress: setWordSpacing,
-		title: 'setWordSpacing',
+		title: 'WordSpacing',
 		steps: 3,
 	},
 ];
