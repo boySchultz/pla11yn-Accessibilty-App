@@ -21,25 +21,45 @@ import { SettingsState } from "../../../store/StoreTypes";
 // 	Text can be resized without assistive technology up to 200 percent in a way that does not require the user to scroll horizontally to read a line of text on a full-screen window.
 
 
-
-	export const setLineHeight = (
+export const setLineHeight = (
 	ref: React.MutableRefObject<WebView | null>,
 	getSettingsState: (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-		const settingsState = getSettingsState({ settingsKey: "setWordSpacing" });
+	const settingsState = getSettingsState({ settingsKey: "setWordSpacing" });
 	console.log("changeRowHeight");
 };
 
+export const setParagraphHeight = (
+	ref: React.MutableRefObject<WebView | null>,
+	getSettingsState: (
+		searchSetting: Partial<SettingsState>
+	) => SettingsState | undefined
+) => {
+	console.log('setParagraphHeight');
+
+// 	const fontSize = parseFloat(window.getComputedStyle(document.body).fontSize);
+// 	const paragraphSpacingValue = 2 * fontSize / 16; // 2 times the font size
+// 	const paragraphs = document.querySelectorAll('p');
+// 	paragraphs.forEach((paragraph) => {
+// 		paragraph.style.marginBottom = `${paragraphSpacingValue}rem`;
+// 	});
+//
+// ref.current?.injectJavaScript(`
+//   ${paragraphSpacing}
+// `);
+};
 export const setLetterSpacing = (
 	ref: React.MutableRefObject<WebView | null>,
-	amount: number
+	getSettingsState: (
+		searchSetting: Partial<SettingsState>
+	) => SettingsState | undefined
 ) => {
 	ref.current?.injectJavaScript(`
       var body = document.body;
       var currentSpacing = parseFloat(window.getComputedStyle(body).letterSpacing);
-      body.style.letterSpacing = (currentSpacing + ${amount}) + 'px';
+      body.style.letterSpacing = (currentSpacing) + 'px';
     `);
 };
 
@@ -80,7 +100,7 @@ export const setWordSpacing = (
 //endregion
 
 
-	export const setFontSize = (
+export const setFontSize = (
 	ref: React.MutableRefObject<WebView | null>,
 	getSettingsState: (
 		searchSetting: Partial<SettingsState>
