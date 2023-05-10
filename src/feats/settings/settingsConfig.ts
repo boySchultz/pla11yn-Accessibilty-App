@@ -1,4 +1,4 @@
-import { setWordSpacing } from "./methods/a11yMethods";
+import { setWordSpacing, setFontSize } from "./methods/a11yMethods";
 import React from "react";
 import { WebView } from "react-native-webview";
 import { SettingsState } from "../../store/StoreTypes";
@@ -21,21 +21,21 @@ export const settingsConfig: AllySetting[] = [
     steps: 3,
   },
   {
-    settingsKey: "2",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
-    steps: 4,
-  },
-  {
-    settingsKey: "3",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
-    steps: 2,
-  },
-  {
-    settingsKey: "4",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
+    settingsKey: "setFontSize",
+    onPress: setFontSize,
+    title: "setFontSize",
     steps: 3,
   },
+  // {
+  //   settingsKey: "3",
+  //   onPress: setWordSpacing,
+  //   title: "setWordSpacing",
+  //   steps: 2,
+  // },
+  // {
+  //   settingsKey: "4",
+  //   onPress: setWordSpacing,
+  //   title: "setWordSpacing",
+  //   steps: 3,
+  // },
 ];

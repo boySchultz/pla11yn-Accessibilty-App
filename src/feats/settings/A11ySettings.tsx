@@ -13,8 +13,8 @@ export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
-          settingsKey={item.settingsKey}
           webViewRef={webViewRef}
+          settingsKey={item.settingsKey}
           onPress={item.onPress}
           title={item.title}
           steps={item.steps}
@@ -27,7 +27,7 @@ export const A11ySettings = ({ webViewRef }: A11lySettingsProps) => {
     <View style={styles.container}>
       <FlatList
         data={settingsConfig}
-        numColumns={2} // number of columns you want in the grid
+        numColumns={2}
         renderItem={renderSettings}
         columnWrapperStyle={styles.row} // Apply styles to each row
       />

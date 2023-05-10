@@ -15,25 +15,25 @@ const removeSetting = (store: AllyStore, settingsKey: string) => {
   };
 };
 
-const updateSetting = (store: AllyStore, update: SettingsState) => {
-  console.log("update");
+const updateSetting = (store: AllyStore, updateState: SettingsState) => {
+  const updatedState = store.settings.map((currentState) => {
+    if (currentState.settingsKey !== updateState.settingsKey)
+      return currentState;
+    return { ...currentState, ...updateState };
+  });
   return {
-    settings: store.settings.map((currentSetting) => {
-      if (currentSetting.settingsKey !== update.settingsKey)
-        return currentSetting;
-      return { ...currentSetting, ...update };
-    }),
+    settings: updatedState
   };
 };
 
-const addSetting = (store: AllyStore, update: SettingsState) => {
-  console.log("add");
+const addSetting = (store: AllyStore, newState: SettingsState) => {
   return {
-    settings: [...store.settings, update],
+    settings: [...store.settings, newState],
   };
 };
 const updateOrCreateSetting = (store: AllyStore, setting: SettingsState) => {
-  console.log("store", store.settings);
+  console.log('store', store.settings);
+  console.log('update or create state', setting);
   return !store.settings.find((s) => s.settingsKey === setting.settingsKey)
     ? addSetting(store, setting)
     : updateSetting(store, setting);
