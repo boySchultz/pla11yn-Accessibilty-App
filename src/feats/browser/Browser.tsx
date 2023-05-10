@@ -71,6 +71,9 @@ const Browser = () => {
       event.nativeEvent.data
     ) as Partial<SettingsState>;
     if (!eventState.initialValue) {
+      console.log(
+        `setting initial value of ${eventState.settingsKey} to ${eventState.initialValue}`
+      );
       writeSetting({
         initialValue: eventState.initialValue,
         settingsKey: eventState.settingsKey,

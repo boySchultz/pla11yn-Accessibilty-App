@@ -3,11 +3,15 @@ import React from "react";
 import { WebView } from "react-native-webview";
 import { SettingsState } from "../../store/StoreTypes";
 
+export type SettingsKey = "setWordSpacing" | "setFontSize";
+
 export interface AllySetting {
-  settingsKey: string;
+  settingsKey: SettingsKey;
   onPress: (
     ref: React.MutableRefObject<WebView | null>,
-    settingsState: SettingsState | undefined
+    getSettingsState: (
+      searchSetting: Partial<SettingsState>
+    ) => SettingsState | undefined
   ) => void;
   title: string;
   steps: number;

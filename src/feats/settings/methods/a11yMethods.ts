@@ -3,13 +3,16 @@ import React from "react";
 import { SettingsState } from "../../../store/StoreTypes";
 
 export const setFontSize = (
-	ref: React.MutableRefObject<WebView | null>,
-	settingsState: SettingsState | undefined,
+  ref: React.MutableRefObject<WebView | null>,
+  getSettingsState: (
+    searchSetting: Partial<SettingsState>
+  ) => SettingsState | undefined
 ) => {
-	ref.current?.injectJavaScript(`
+  const state = getSettingsState({ settingsKey: "setFontSize" });
+  ref.current?.injectJavaScript(`
       var body = document.body;
       var currentFontSize = parseFloat(window.getComputedStyle(body).fontSize);
-      body.style.fontSize = (currentFontSize + ${settingsState?.activeStep}) + 'px';
+      body.style.fontSize = (currentFontSize + ${state?.activeStep}) + 'px';
     `);
 };
 
@@ -48,50 +51,46 @@ export const setFontSize = (
 // ) => {
 //   console.log("changeTextJustification");
 // };
+
 //region SC 1.4.12:Text Spacing (Level AA)
 // Word spacing to at least 0.16 times the font size:
 //sets min values according to wcag AA for text spacing
 export const setWordSpacing = (
-	ref: React.MutableRefObject<WebView | null>,
-	settingsState: SettingsState | undefined
+  ref: React.MutableRefObject<WebView | null>,
+  getSettingsState: (
+    searchSetting: Partial<SettingsState>
+  ) => SettingsState | undefined
 ) => {
-	console.log('active step', settingsState?.activeStep);
-	if (settingsState?.initialValue === undefined) {
-		console.log('!settingsSate');
-		ref.current?.injectJavaScript(`
-      var body = document.body;
-      var currentFontSize = parseFloat(window.getComputedStyle(body).wordSpacing);
-      window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setWordSpacing', initialValue: currentFontSize}));
-      body.style.wordSpacing = (0.16 * currentFontSize) + 'px';
+  const settingsState = getSettingsState({ settingsKey: "setWordSpacing" });
+  console.log("settings state", settingsState);
+  if (settingsState?.initialValue === undefined) {
+    console.log("!settingsSate. initial value");
+    ref.current?.injectJavaScript(`
+		  var body = document.body;
+			var wordSpacingRem = (parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize));
+      window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setWordSpacing', initialValue: wordSpacingRem}));
+      body.style.wordSpacing = '0.16rem';
     `);
-	} else {
-		if (settingsState?.activeStep === 0) {
-			console.log('activeStep===0');
-			ref.current?.injectJavaScript(`
+  } else {
+    const wordSpacing = (steps: number) => {
+      switch (steps) {
+        case 0:
+          return settingsState.initialValue;
+        case 1:
+          return 0.16;
+        case 2:
+          return 0.32;
+        case 3:
+          return 0.64;
+      }
+    };
+
+    console.log("size factor", wordSpacing(settingsState.activeStep));
+    ref.current?.injectJavaScript(`
       var body = document.body;
-      var fontSize = parseFloat(window.getComputedStyle(body).fontSize);
-      body.style.wordSpacing = ${settingsState.initialValue} + 'px';
+      body.style.wordSpacing = '${wordSpacing(settingsState.activeStep)}rem';
     `);
-		} else {
-			const sizeFactor = (steps: number) => {
-				switch (steps) {
-					case 1:
-						return 0.16;
-					case 2:
-						return 0.3;
-					case 3:
-						return 0.8;
-				}
-			};
-			ref.current?.injectJavaScript(`
-      var body = document.body;
-      var fontSize = parseFloat(window.getComputedStyle(body).fontSize);
-      body.style.wordSpacing = (${sizeFactor(
-				settingsState.activeStep
-			)} * fontSize) + 'px';
-    `);
-		}
-	}
+  }
 };
 
 // export const setLetterSpacing = (

@@ -22,7 +22,7 @@ const updateSetting = (store: AllyStore, updateState: SettingsState) => {
     return { ...currentState, ...updateState };
   });
   return {
-    settings: updatedState
+    settings: updatedState,
   };
 };
 
@@ -32,8 +32,6 @@ const addSetting = (store: AllyStore, newState: SettingsState) => {
   };
 };
 const updateOrCreateSetting = (store: AllyStore, setting: SettingsState) => {
-  console.log('store', store.settings);
-  console.log('update or create state', setting);
   return !store.settings.find((s) => s.settingsKey === setting.settingsKey)
     ? addSetting(store, setting)
     : updateSetting(store, setting);

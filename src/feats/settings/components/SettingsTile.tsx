@@ -1,19 +1,22 @@
-import React, { MutableRefObject } from "react";
+import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
 import { useAllyStore } from "../../../store/allyStore";
 import { SettingsState } from "../../../store/StoreTypes";
+import { SettingsKey } from "../settingsConfig";
 
 interface SettingsTileProps {
   onPress: (
-    ref: MutableRefObject<WebView | null>,
-    settingsState: SettingsState | undefined
+    ref: React.MutableRefObject<WebView | null>,
+    getSettingsState: (
+      searchSetting: Partial<SettingsState>
+    ) => SettingsState | undefined
   ) => void;
   webViewRef: React.MutableRefObject<WebView | null>;
   title: string;
   steps: number;
-  settingsKey: string;
+  settingsKey: SettingsKey;
 }
 
 export const SettingsTile = ({
@@ -27,19 +30,19 @@ export const SettingsTile = ({
   const settingsState = getSettingByKey({ settingsKey: settingsKey });
   const activeStep = settingsState?.activeStep ?? 0;
   const handleNext = () => {
-    onPress(webViewRef,settingsState);
     writeSetting({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
+    onPress(webViewRef, getSettingByKey);
   };
 
   const handleBack = () => {
-    onPress(webViewRef, settingsState);
     writeSetting({
       settingsKey: settingsKey,
       activeStep: activeStep === 0 ? 0 : activeStep - 1,
     });
+    onPress(webViewRef, getSettingByKey);
   };
 
   return (

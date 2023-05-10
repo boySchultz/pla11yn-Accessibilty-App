@@ -1,7 +1,9 @@
+import { SettingsKey } from "../feats/settings/settingsConfig";
+
 export type SettingsState = {
-  settingsKey: string;
+  settingsKey: SettingsKey;
   activeStep: number;
-  initialValue: number;
+  initialValue: number | string;
 };
 
 export type AllyStore = {
