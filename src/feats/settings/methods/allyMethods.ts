@@ -44,6 +44,7 @@ export const setLineHeight = (
 					return 1.5;
 				case 2:
 					return 1.8;
+				default: settingsState.initialValue;
 			}
 		};
 		ref.current?.injectJavaScript(`
@@ -59,27 +60,40 @@ export const setParagraphHeight = (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-	// const settingsState = getSettingsState({ settingsKey: 'setParagraphHeight' });
-	// if (settingsState?.initialValue === undefined) {
-	// 	ref.current?.injectJavaScript(`
-	// 	  var body = document.body;
-	// 		var wordSpacingRem = (parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize));
-  //     window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setLineHeight', initialValue: wordSpacingRem}));
-  //     body.style.wordSpacing = '0.16em';
-  //   `);
-	// }
-	console.log('setParagraphHeight');
+	const settingsState = getSettingsState({ settingsKey: 'setParagraphHeight' });
+	if (settingsState?.initialValue === undefined) {
+		ref.current?.injectJavaScript(`
+			  var body = document.body;
+			  var firstParagraph = document.querySelector('p') || 0;
+				var paragraphHeight = (parseFloat(window.getComputedStyle(firstParagraph).getPropertyValue('margin-bottom')) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
+				
+		    window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setParagraphHeight', initialValue: paragraphHeight}));
+		  
+		    var paragraphs = document.querySelectorAll('p');
+				paragraphs.forEach((p) => {
+          p.style.marginBottom = '2em';
+				});
+		  `);
+	} else {
+		const paragraphHeight = (steps: number) => {
+			switch (steps) {
+				case 0:
+					return settingsState.initialValue;
+				case 1:
+					return 2;
+				case 2:
+					return 2.8;
+				default: settingsState.initialValue;
 
-// 	const fontSize = parseFloat(window.getComputedStyle(document.body).fontSize);
-// 	const paragraphSpacingValue = 2 * fontSize / 16; // 2 times the font size
-// 	const paragraphs = document.querySelectorAll('p');
-// 	paragraphs.forEach((paragraph) => {
-// 		paragraph.style.marginBottom = `${paragraphSpacingValue}em`;
-// 	});
-//
-// ref.current?.injectJavaScript(`
-//   ${paragraphSpacing}
-// `);
+			}
+		};
+		ref.current?.injectJavaScript(`
+        var paragraphs = document.querySelectorAll('p');
+				paragraphs.forEach((p) => {
+          p.style.marginBottom = '${paragraphHeight(settingsState.activeStep)}em';
+				});
+    `);
+	}
 };
 export const setLetterSpacing = (
 	ref: React.MutableRefObject<WebView | null>,
@@ -104,7 +118,7 @@ export const setWordSpacing = (
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
 		  var body = document.body;
-			var wordSpacing = (parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize));
+			var wordSpacing = (parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
       window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setWordSpacing', initialValue: wordSpacing}));
       body.style.wordSpacing = '0.16em';
     `);
@@ -119,6 +133,8 @@ export const setWordSpacing = (
 					return 0.32;
 				case 3:
 					return 0.40;
+				default: settingsState.initialValue;
+
 			}
 		};
 		ref.current?.injectJavaScript(`
