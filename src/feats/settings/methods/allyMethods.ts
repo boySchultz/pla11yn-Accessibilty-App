@@ -102,21 +102,6 @@ export const setLetterSpacing = (
 	) => SettingsState | undefined
 ) => {
 	const settingsState = getSettingsState({ settingsKey: 'setLetterSpacing' });
-
-	const letterSpacing = (steps: number) => {
-		switch (steps) {
-			case 0:
-				return settingsState?.initialValue;
-			case 1:
-				return '0.12em';
-			case 2:
-				return '0.16em';
-			case 3:
-				return '0.20em';
-			default:
-				return settingsState?.initialValue;
-		}
-	};
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
 			var body = document.body;
@@ -129,6 +114,20 @@ export const setLetterSpacing = (
       body.style.letterSpacing = '0.12em'; //letterSpacing(1)
 		  `);
 	} else {
+		const letterSpacing = (steps: number) => {
+			switch (steps) {
+				case 0:
+					return settingsState.initialValue;
+				case 1:
+					return '0.12em';
+				case 2:
+					return '0.16em';
+				case 3:
+					return '0.20em';
+				default:
+					return settingsState.initialValue;
+			}
+		};
 		ref.current?.injectJavaScript(`
 			document.body.style.letterSpacing = '${letterSpacing(settingsState.activeStep)}';
     `);
