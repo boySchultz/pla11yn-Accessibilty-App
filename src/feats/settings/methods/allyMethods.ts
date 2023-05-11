@@ -5,21 +5,18 @@ import { SettingsState } from "../../../store/StoreTypes";
 
 //region TEXT PRESENTATION
 // SC 1.4.12:Text Spacing (Level AA)
-// Line height (line spacing) to at least 1.5 times the font size;
-// Spacing following paragraphs to at least 2 times the font size;
+// Line height (line spacing) to at least 1.5 times the font size; V
+// Spacing following paragraphs to at least 2 times the font size; V
 // Letter spacing (tracking) to at least 0.12 times the font size;
-// Word spacing to at least 0.16 times the font size.
-
+// Word spacing to at least 0.16 times the font size. V
 
 // Success Criterion 1.4.8 Visual Presentation (Level AAA)
-
 // For the visual presentation of blocks of text, a mechanism is available to achieve the following:
-// 	(Foreground and background colors can be selected by the user.)
-// 	(Width is no more than 80 characters or glyphs (40 if CJK).)
+// (Foreground and background colors can be selected by the user.)
+// (Width is no more than 80 characters or glyphs (40 if CJK).)
 // Text is not justified (aligned to both the left and the right margins).
 // Line spacing (leading) is at least space-and-a-half within paragraphs, and paragraph spacing is at least 1.5 times larger than the line spacing.
 // Text can be resized without assistive technology up to 200 percent in a way that does not require the user to scroll horizontally to read a line of text on a full-screen window.
-
 
 export const setLineHeight = (
 	ref: React.MutableRefObject<WebView | null>,
@@ -28,12 +25,14 @@ export const setLineHeight = (
 	) => SettingsState | undefined
 ) => {
 	const settingsState = getSettingsState({ settingsKey: 'setLineHeight' });
+
+
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
 		  var body = document.body;
 		  var lineHeight = (parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
 		  window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey: 'setLineHeight', initialValue: lineHeight}));
-      body.style.lineHeight = '1.5em';
+      body.style.lineHeight = '1.5em'; // lineSpacing(1)
 		`);
 	} else {
 		const lineSpacing = (steps: number) => {
@@ -44,12 +43,12 @@ export const setLineHeight = (
 					return 1.5;
 				case 2:
 					return 1.8;
-				default: settingsState.initialValue;
+				default:
+					return settingsState.initialValue;
 			}
 		};
 		ref.current?.injectJavaScript(`
-      var body = document.body;
-      body.style.lineHeight = '${lineSpacing(settingsState.activeStep)}em';
+      document.body.style.lineHeight = '${lineSpacing(settingsState.activeStep)}em';
     `);
 	}
 };
@@ -71,7 +70,7 @@ export const setParagraphHeight = (
 		  
 		    var paragraphs = document.querySelectorAll('p');
 				paragraphs.forEach((p) => {
-          p.style.marginBottom = '2em';
+          p.style.marginBottom = '2em'; //paragraphHeight(1)
 				});
 		  `);
 	} else {
@@ -82,8 +81,9 @@ export const setParagraphHeight = (
 				case 1:
 					return 2;
 				case 2:
-					return 2.8;
-				default: settingsState.initialValue;
+					return 3;
+				default:
+					return settingsState.initialValue;
 
 			}
 		};
@@ -101,11 +101,38 @@ export const setLetterSpacing = (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-	ref.current?.injectJavaScript(`
-      var body = document.body;
-      var currentSpacing = parseFloat(window.getComputedStyle(body).letterSpacing);
-      body.style.letterSpacing = (currentSpacing) + 'px';
+	const settingsState = getSettingsState({ settingsKey: 'setLetterSpacing' });
+
+	const letterSpacing = (steps: number) => {
+		switch (steps) {
+			case 0:
+				return settingsState?.initialValue;
+			case 1:
+				return '0.12em';
+			case 2:
+				return '0.16em';
+			case 3:
+				return '0.20em';
+			default:
+				return settingsState?.initialValue;
+		}
+	};
+	if (settingsState?.initialValue === undefined) {
+		ref.current?.injectJavaScript(`
+			var body = document.body;
+			var bodyStyles = window.getComputedStyle(body);
+			if (bodyStyles.letterSpacing === 'normal') {
+				window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey: 'setLetterSpacing', initialValue: bodyStyles.letterSpacing}));
+			} else {
+					window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey: 'setLetterSpacing', initialValue: bodyStyles.letterSpacing / bodyStyles.fontSize}));
+			}
+      body.style.letterSpacing = '0.12em'; //letterSpacing(1)
+		  `);
+	} else {
+		ref.current?.injectJavaScript(`
+			document.body.style.letterSpacing = '${letterSpacing(settingsState.activeStep)}';
     `);
+	}
 };
 
 export const setWordSpacing = (
@@ -120,7 +147,7 @@ export const setWordSpacing = (
 		  var body = document.body;
 			var wordSpacing = (parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
       window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setWordSpacing', initialValue: wordSpacing}));
-      body.style.wordSpacing = '0.16em';
+      body.style.wordSpacing = '0.16em' //wordSpacing(1);
     `);
 	} else {
 		const wordSpacing = (steps: number) => {
@@ -133,13 +160,13 @@ export const setWordSpacing = (
 					return 0.32;
 				case 3:
 					return 0.40;
-				default: settingsState.initialValue;
+				default:
+					return settingsState.initialValue;
 
 			}
 		};
 		ref.current?.injectJavaScript(`
-      var body = document.body;
-      body.style.wordSpacing = '${wordSpacing(settingsState.activeStep)}em';
+      document.body.style.wordSpacing = '${wordSpacing(settingsState.activeStep)}em';
     `);
 	}
 };
