@@ -5,10 +5,10 @@ import { SettingsState } from "../../../store/StoreTypes";
 
 //region TEXT PRESENTATION
 // SC 1.4.12:Text Spacing (Level AA)
-// Line height (line spacing) to at least 1.5 times the font size;
-// Spacing following paragraphs to at least 2 times the font size;
+// Line height (line spacing) to at least 1.5 times the font size; V
+// Spacing following paragraphs to at least 2 times the font size; V
 // Letter spacing (tracking) to at least 0.12 times the font size;
-// Word spacing to at least 0.16 times the font size.
+// Word spacing to at least 0.16 times the font size. V
 
 
 // Success Criterion 1.4.8 Visual Presentation (Level AAA)
@@ -44,12 +44,12 @@ export const setLineHeight = (
 					return 1.5;
 				case 2:
 					return 1.8;
-				default: settingsState.initialValue;
+				default:
+					return settingsState.initialValue;
 			}
 		};
 		ref.current?.injectJavaScript(`
-      var body = document.body;
-      body.style.lineHeight = '${lineSpacing(settingsState.activeStep)}em';
+      document.body.style.lineHeight = '${lineSpacing(settingsState.activeStep)}em';
     `);
 	}
 };
@@ -82,8 +82,9 @@ export const setParagraphHeight = (
 				case 1:
 					return 2;
 				case 2:
-					return 2.8;
-				default: settingsState.initialValue;
+					return 3;
+				default:
+					return settingsState.initialValue;
 
 			}
 		};
@@ -101,11 +102,41 @@ export const setLetterSpacing = (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-	ref.current?.injectJavaScript(`
-      var body = document.body;
-      var currentSpacing = parseFloat(window.getComputedStyle(body).letterSpacing);
-      body.style.letterSpacing = (currentSpacing) + 'px';
+	const settingsState = getSettingsState({ settingsKey: 'setLetterSpacing' });
+
+	const letterSpacing = (steps: number) => {
+		switch (steps) {
+			case 0:
+				return settingsState?.initialValue;
+			case 1:
+				return '0.12em';
+			case 2:
+				return '0.16em';
+			case 3:
+				return '0.20em';
+			default:
+				return settingsState?.initialValue;
+		}
+	};
+	if (settingsState?.initialValue === undefined) {
+		ref.current?.injectJavaScript(`
+			var body = document.body;
+			var bodyStyles = window.getComputedStyle(body);
+			if (bodyStyles.letterSpacing === 'normal') {
+				window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey: 'setLetterSpacing', initialValue: bodyStyles.letterSpacing}));
+			} else {
+					window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey: 'setLetterSpacing', initialValue: bodyStyles.letterSpacing / bodyStyles.fontSize}));
+			}
+      body.style.letterSpacing = '0.12em';
+		  `);
+	} else {
+
+		console.log(letterSpacing(settingsState.activeStep));
+
+		ref.current?.injectJavaScript(`
+			document.body.style.letterSpacing = '${letterSpacing(settingsState.activeStep)}';
     `);
+	}
 };
 
 export const setWordSpacing = (
@@ -133,13 +164,13 @@ export const setWordSpacing = (
 					return 0.32;
 				case 3:
 					return 0.40;
-				default: settingsState.initialValue;
+				default:
+					return settingsState.initialValue;
 
 			}
 		};
 		ref.current?.injectJavaScript(`
-      var body = document.body;
-      body.style.wordSpacing = '${wordSpacing(settingsState.activeStep)}em';
+      document.body.style.wordSpacing = '${wordSpacing(settingsState.activeStep)}em';
     `);
 	}
 };
