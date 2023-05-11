@@ -7,7 +7,7 @@ import { SettingsState } from "../../../store/StoreTypes";
 // SC 1.4.12:Text Spacing (Level AA)
 // Line height (line spacing) to at least 1.5 times the font size; V
 // Spacing following paragraphs to at least 2 times the font size; V
-// Letter spacing (tracking) to at least 0.12 times the font size;
+// Letter spacing (tracking) to at least 0.12 times the font size; V
 // Word spacing to at least 0.16 times the font size. V
 
 // Success Criterion 1.4.8 Visual Presentation (Level AAA)
@@ -140,7 +140,7 @@ export const setWordSpacing = (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-	const settingsState = getSettingsState({ settingsKey: "setWordSpacing" });
+	const settingsState = getSettingsState({ settingsKey: 'setWordSpacing' });
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
 		  var body = document.body;
@@ -170,22 +170,43 @@ export const setWordSpacing = (
 	}
 };
 
-//endregion
-
-
 export const setFontSize = (
 	ref: React.MutableRefObject<WebView | null>,
 	getSettingsState: (
 		searchSetting: Partial<SettingsState>
 	) => SettingsState | undefined
 ) => {
-	const state = getSettingsState({ settingsKey: "setFontSize" });
-	ref.current?.injectJavaScript(`
-      var body = document.body;
-      var currentFontSize = parseFloat(window.getComputedStyle(body).fontSize);
-      body.style.fontSize = (currentFontSize + ${state?.activeStep}) + 'px';
+	const settingsState = getSettingsState({ settingsKey: 'setFontSize' });
+
+	if (settingsState?.initialValue === undefined) {
+		ref.current?.injectJavaScript(`
+			var fontSize = parseFloat(window.getComputedStyle(document.body).fontSize);
+      window.ReactNativeWebView.postMessage(JSON.stringify({settingsKey:'setFontSize', initialValue: fontSize}));
+      document.body.style.fontSize = fontSize * 1.33 +'px'; //wordSpacing(1);
     `);
-};
+	} else {
+		const fontSize = (steps: number) => {
+			switch (steps) {
+				case 0:
+					return settingsState.initialValue;
+				case 1:
+					return (parseFloat(settingsState.initialValue.toString()) * 1.33);
+				case 2:
+					return (parseFloat(settingsState.initialValue.toString()) * 1.66);
+				case 3:
+					return (parseFloat(settingsState.initialValue.toString()) * 2);
+				default:
+					return settingsState.initialValue;
+
+			}
+		};
+		ref.current?.injectJavaScript(`
+      document.body.style.fontSize = '${fontSize(settingsState.activeStep)}' + 'px';
+    `);
+	}
+}
+//endregion
+
 
 // export const changeZoom = (
 //   ref: React.MutableRefObject<WebView | null>,

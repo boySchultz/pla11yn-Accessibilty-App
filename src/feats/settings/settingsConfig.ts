@@ -1,4 +1,10 @@
-import { setWordSpacing, setLineHeight, setParagraphHeight, setLetterSpacing } from './methods/allyMethods';
+import {
+	setWordSpacing,
+	setLineHeight,
+	setParagraphHeight,
+	setLetterSpacing,
+	setFontSize
+} from './methods/allyMethods';
 import React from 'react';
 import { WebView } from 'react-native-webview';
 import { SettingsState } from '../../store/StoreTypes';
@@ -24,27 +30,33 @@ export interface AllySetting {
 
 export const settingsConfig: AllySetting[] = [
 	{
+		settingsKey: 'setFontSize',
+		onPress: setFontSize,
+		title: 'Font Size',
+		steps: 3,
+	},
+	{
 		settingsKey: 'setLineHeight',
 		onPress: setLineHeight,
-		title: 'LineHeight',
+		title: 'Line Height',
 		steps: 2,
 	},
 	{
 		settingsKey: 'setParagraphHeight',
 		onPress: setParagraphHeight,
-		title: 'ParagraphHeight',
+		title: 'Paragraph Height',
 		steps: 2,
 	},
 	{
 		settingsKey: 'setLetterSpacing',
 		onPress: setLetterSpacing,
-		title: 'LetterSpacing',
+		title: 'Letter Spacing',
 		steps: 3,
 	},
 	{
 		settingsKey: 'setWordSpacing',
 		onPress: setWordSpacing,
-		title: 'WordSpacing',
+		title: 'Word Spacing',
 		steps: 3,
 	},
 ];
