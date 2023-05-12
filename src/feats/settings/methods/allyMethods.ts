@@ -90,6 +90,8 @@ export const setParagraphHeight = (
 		};
 		ref.current?.injectJavaScript(`
 		var paragraphs = document.querySelectorAll('p');
+		
+		
 		paragraphs.forEach((p) => {
 			p.style.marginBottom = '${paragraphHeight(settingsState.activeStep)}em';
 		});
@@ -236,8 +238,6 @@ export const setTextAlignment = (
 		`);
 	} else {
 		const alignments = ['start', 'center', 'end', 'justify'].filter((a) => a !== settingsState?.initialValue);
-
-		console.log('alignments', alignments);
 		const textAlignment = (steps: number) => {
 			switch (steps) {
 				case 0:
@@ -252,27 +252,9 @@ export const setTextAlignment = (
 					return settingsState.initialValue;
 			}
 		};
-		console.log('textAlign', settingsState.activeStep, textAlignment(settingsState.activeStep));
 		ref.current?.injectJavaScript(`
 		document.body.style.textAlign = '${textAlignment(settingsState.activeStep)}';
 		`);
 	}
 };
-
-//endregion
-
-
-// export const changeZoom = (
-//   ref: React.MutableRefObject<WebView | null>,
-//   amount: number
-// ) => {
-//   ref.current?.injectJavaScript(`
-//       var body = document.body;
-//       var currentZoom = parseFloat(window.getComputedStyle(body).zoom);
-//       body.style.zoom = (currentZoom + ${amount});
-//     `);
-// };
-//
-
-
 //endregion
