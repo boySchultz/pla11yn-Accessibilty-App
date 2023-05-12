@@ -10,6 +10,7 @@ interface StepperProps {
   onBack: () => void;
   onNext: () => void;
 }
+
 export const Stepper = ({
   steps,
   activeStep,
@@ -29,16 +30,17 @@ export const Stepper = ({
         onPress={() => onBack()}
         disabled={activeStep === 0}
       />
-      {Array.from({ length: steps }, (_, index) => (
-        <View
-          key={index}
-          style={[
-            styles.circle,
-            index == steps - 1 && styles.lastCircle,
-            index + 1 === activeStep && styles.activeCircle,
-          ]}
-        />
-      ))}
+      <View style={styles.dots}>
+        {Array.from({ length: steps }, (_, index) => (
+          <View
+            key={index}
+            style={[
+              styles.circle,
+              index + 1 === activeStep && styles.activeCircle,
+            ]}
+          />
+        ))}
+      </View>
       <IconButton
         icon={({ size, color }) => (
           <MaterialCommunityIcons
@@ -57,6 +59,11 @@ export const Stepper = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    alignItems: "center",
+  },
+  dots: {
+    flex: 1,
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -66,9 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderColor: "#000",
-    marginRight: 4,
   },
-  lastCircle: { marginRight: 0 },
   activeCircle: {
     backgroundColor: "#000",
   },

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { WebView } from "react-native-webview";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
 import {
   TouchableOpacity,
   Animated,
@@ -9,14 +9,18 @@ import {
 } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
-import { A11lySettings } from "../settings/A11lySettings";
+import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
+import { SettingsState } from "../../store/StoreTypes";
+import { useAllyStore } from "../../store/allyStore";
 
 const Browser = () => {
+  const { writeSetting } = useAllyStore();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
 
+  //region drawer animation
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
   const panResponder = useRef(
     PanResponder.create({
@@ -59,6 +63,22 @@ const Browser = () => {
       useNativeDriver: false,
     }).start(() => setShowSettings(false));
   };
+  //endregion
+
+  //set initial value for settings
+  const handleMessage = (event: WebViewMessageEvent) => {
+    const eventState = JSON.parse(
+      event.nativeEvent.data
+    ) as Partial<SettingsState>;
+    console.log(
+      eventState,
+      `setting initial value of ${eventState.settingsKey} to ${eventState.initialValue}`
+    );
+    writeSetting({
+      initialValue: eventState.initialValue,
+      settingsKey: eventState.settingsKey,
+    });
+  };
 
   return (
     <>
@@ -71,7 +91,11 @@ const Browser = () => {
       </Appbar.Header>
 
       {/*WebView*/}
-      <WebView ref={webViewRef} source={{ uri: url }} />
+      <WebView
+        ref={webViewRef}
+        source={{ uri: url }}
+        onMessage={(event) => handleMessage(event)}
+      />
 
       {/*Settings*/}
       {showSettings && (
@@ -93,7 +117,7 @@ const Browser = () => {
           ]}
           {...panResponder.panHandlers}
         >
-          <A11lySettings webViewRef={webViewRef} />
+          <AllySettings webViewRef={webViewRef} />
           <View style={{ padding: 16 }}>
             <Button onPress={closeDrawer}>Close Menu</Button>
           </View>

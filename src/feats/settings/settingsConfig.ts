@@ -1,12 +1,30 @@
-import { setWordSpacing } from "./methods/a11yMethods";
+import {
+  setWordSpacing,
+  setLineHeight,
+  setParagraphHeight,
+  setLetterSpacing,
+  setFontSize,
+  setTextAlignment,
+} from "./methods/allyMethods";
 import React from "react";
 import { WebView } from "react-native-webview";
+import { SettingsState } from "../../store/StoreTypes";
+
+export type SettingsKey =
+  | "setWordSpacing"
+  | "setFontSize"
+  | "setLineHeight"
+  | "setLetterSpacing"
+  | "setParagraphHeight"
+  | "setTextAlignment";
 
 export interface AllySetting {
-  key: string;
+  settingsKey: SettingsKey;
   onPress: (
     ref: React.MutableRefObject<WebView | null>,
-    steps?: number
+    getSettingsState: (
+      searchSetting: Partial<SettingsState>
+    ) => SettingsState | undefined
   ) => void;
   title: string;
   steps: number;
@@ -14,27 +32,39 @@ export interface AllySetting {
 
 export const settingsConfig: AllySetting[] = [
   {
-    key: "setWordSpacing",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
+    settingsKey: "setTextAlignment",
+    onPress: setTextAlignment,
+    title: "Text Alignment",
     steps: 3,
   },
   {
-    key: "2",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
+    settingsKey: "setFontSize",
+    onPress: setFontSize,
+    title: "Font Size",
     steps: 3,
   },
   {
-    key: "3",
-    onPress: setWordSpacing,
-    title: "setWordSpacing",
+    settingsKey: "setLineHeight",
+    onPress: setLineHeight,
+    title: "Line Height",
+    steps: 2,
+  },
+  {
+    settingsKey: "setParagraphHeight",
+    onPress: setParagraphHeight,
+    title: "Paragraph Height",
+    steps: 2,
+  },
+  {
+    settingsKey: "setLetterSpacing",
+    onPress: setLetterSpacing,
+    title: "Letter Spacing",
     steps: 3,
   },
   {
-    key: "4",
+    settingsKey: "setWordSpacing",
     onPress: setWordSpacing,
-    title: "setWordSpacing",
+    title: "Word Spacing",
     steps: 3,
   },
 ];

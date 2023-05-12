@@ -5,15 +5,16 @@ import { SettingsTile } from "./components/SettingsTile";
 import { settingsConfig } from "./settingsConfig";
 import theme from "../../../theme";
 
-interface A11lySettingsProps {
+interface AllySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
 }
-export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
+export const AllySettings = ({ webViewRef }: AllySettingsProps) => {
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
           webViewRef={webViewRef}
+          settingsKey={item.settingsKey}
           onPress={item.onPress}
           title={item.title}
           steps={item.steps}
@@ -26,10 +27,9 @@ export const A11lySettings = ({ webViewRef }: A11lySettingsProps) => {
     <View style={styles.container}>
       <FlatList
         data={settingsConfig}
-        numColumns={2} // number of columns you want in the grid
+        numColumns={2}
         renderItem={renderSettings}
         columnWrapperStyle={styles.row} // Apply styles to each row
-        keyExtractor={(item) => item.key}
       />
     </View>
   );
