@@ -3,7 +3,7 @@ import {
 	setLineHeight,
 	setParagraphHeight,
 	setLetterSpacing,
-	setFontSize
+	setFontSize, setTextAlignment
 } from './methods/allyMethods';
 import React from 'react';
 import { WebView } from 'react-native-webview';
@@ -14,7 +14,8 @@ export type SettingsKey =
 	| 'setFontSize'
 	| 'setLineHeight'
 	| 'setLetterSpacing'
-	| 'setParagraphHeight';
+	| 'setParagraphHeight'
+	| 'setTextAlignment';
 
 export interface AllySetting {
 	settingsKey: SettingsKey;
@@ -29,6 +30,12 @@ export interface AllySetting {
 }
 
 export const settingsConfig: AllySetting[] = [
+	{
+		settingsKey: 'setTextAlignment',
+		onPress: setTextAlignment,
+		title: 'Text Alignment',
+		steps: 3,
+	},
 	{
 		settingsKey: 'setFontSize',
 		onPress: setFontSize,
