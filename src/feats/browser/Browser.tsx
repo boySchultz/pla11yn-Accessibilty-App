@@ -1,12 +1,6 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import {
-  TouchableOpacity,
-  Animated,
-  PanResponder,
-  StyleSheet,
-  View,
-} from "react-native";
+import { TouchableOpacity, Animated, StyleSheet, View, } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
@@ -22,32 +16,7 @@ const Browser = () => {
 
   //region drawer animation
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (evt, gestureState) => {
-        // Only allow dragging up from the bottom
-        return gestureState.dy < 0;
-      },
-      onPanResponderMove: (evt, gestureState) => {
-        // Update the bottomDrawerAnim based on the drag distance
-        bottomDrawerAnim.setValue(-gestureState.dy);
-      },
-      onPanResponderRelease: (evt, gestureState) => {
-        // If the drawer was not dragged more than 200px, open it
-        if (gestureState.dy > -200) {
-          Animated.spring(bottomDrawerAnim, {
-            toValue: 0,
-            useNativeDriver: false,
-          }).start();
-        } else {
-          // If the drawer was dragged more than 200px, close it
-          closeDrawer();
-        }
-      },
-    })
-  ).current;
-
-  const openDrawer = () => {
+    const openDrawer = () => {
     Animated.timing(bottomDrawerAnim, {
       toValue: 1,
       duration: 500,
@@ -96,7 +65,6 @@ const Browser = () => {
         source={{ uri: url }}
         onMessage={(event) => handleMessage(event)}
       />
-
       {/*Settings*/}
       {showSettings && (
         <Animated.View
@@ -107,7 +75,7 @@ const Browser = () => {
                 {
                   translateY: bottomDrawerAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [200, 0],
+                    outputRange: [500, 0],
                     //clamp: if the input value goes beyond the specified inputRange, the output value will be clamped to the nearest output range value.
                     extrapolate: "clamp",
                   }),
@@ -115,7 +83,6 @@ const Browser = () => {
               ],
             },
           ]}
-          {...panResponder.panHandlers}
         >
           <AllySettings webViewRef={webViewRef} />
           <View style={{ padding: 16 }}>
@@ -135,7 +102,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 400,
+    height: 500,
   },
 });
 export default Browser;
