@@ -39,10 +39,6 @@ const Browser = () => {
     const eventState = JSON.parse(
       event.nativeEvent.data
     ) as Partial<SettingsState>;
-    console.log(
-      eventState,
-      `setting initial value of ${eventState.settingsKey} to ${eventState.initialValue}`
-    );
     writeSetting({
       initialValue: eventState.initialValue,
       settingsKey: eventState.settingsKey,
