@@ -29,7 +29,7 @@ const Browser = () => {
     Animated.timing(bottomDrawerAnim, {
       toValue: 0,
       duration: 500,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start(() => setShowSettings(false));
   };
   //endregion
