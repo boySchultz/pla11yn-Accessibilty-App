@@ -14,7 +14,6 @@ const Browser = () => {
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
-
   //region drawer animation
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
   const openDrawer = () => {
@@ -34,8 +33,6 @@ const Browser = () => {
     }).start(() => setShowSettings(false));
   };
   //endregion
-
-  //set initial value for settings
   const handleMessage = (event: WebViewMessageEvent) => {
     const eventState = JSON.parse(
       event.nativeEvent.data
@@ -61,7 +58,16 @@ const Browser = () => {
         ref={webViewRef}
         source={{ uri: url }}
         onMessage={(event) => handleMessage(event)}
-        onNavigationStateChange={(navState)=>console.log('on Navigation change: same website?', isSameWebsite(url,navState.url))}
+        // onNavigationStateChange={(navState) => console.log('on Navigation change: same website?', navState)}
+        onLoadStart={(navState) => {
+          console.log(
+						'URL', url,
+						'navState.nativeEvent.url', navState.nativeEvent.url,
+            isSameWebsite(url, navState.nativeEvent.url)
+          );
+					setUrl(navState.nativeEvent.url);
+        }}
+        // onLoadStart={(navState) => console.log('on Load Start', url, navState.nativeEvent.url ,isSameWebsite(url, navState.nativeEvent.url))}
       />
       {/*Settings*/}
       {showSettings && (

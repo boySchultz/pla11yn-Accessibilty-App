@@ -1,6 +1,6 @@
-import { TextInput, Button } from "react-native-paper";
-import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { Button } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, TextInput } from "react-native";
 import theme from "../../../theme";
 import { handleSearch } from "./utils/urlHelpers";
 
@@ -12,13 +12,19 @@ interface SearchBarProps {
 export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
   const [inputText, setInputText] = useState(url);
 
+  useEffect(() => {
+    setInputText(url);
+  }, [url]);
+
   return (
     <>
       <TextInput
-        style={styles.input}
         placeholder="Search or enter URL"
+        textContentType={"URL"}
+        style={styles.input}
         value={inputText}
         onChangeText={(change) => setInputText(change)}
+        numberOfLines={1}
       />
       <Button
         mode={"text"}
@@ -33,8 +39,9 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
 const styles = StyleSheet.create({
   input: {
-    backgroundColor: theme.colors.background,
     flex: 1,
+    overflow: "hidden",
+    backgroundColor: theme.colors.background,
     height: 40,
     marginHorizontal: 10,
     paddingHorizontal: 10,
