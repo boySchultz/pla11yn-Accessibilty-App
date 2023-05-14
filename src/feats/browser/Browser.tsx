@@ -7,6 +7,7 @@ import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
+import { isSameWebsite } from "./utils/urlHelpers";
 
 const Browser = () => {
   const { writeSetting } = useAllyStore();
@@ -60,6 +61,7 @@ const Browser = () => {
         ref={webViewRef}
         source={{ uri: url }}
         onMessage={(event) => handleMessage(event)}
+        onNavigationStateChange={(navState)=>console.log('on Navigation change: same website?', isSameWebsite(url,navState.url))}
       />
       {/*Settings*/}
       {showSettings && (
