@@ -15,7 +15,7 @@ export const AllySettings = ({ webViewRef }: AllySettingsProps) => {
         <SettingsTile
           webViewRef={webViewRef}
           settingsKey={item.settingsKey}
-          onPress={item.onPress}
+          allyMethod={item.allyMethod}
           title={item.title}
           steps={item.steps}
         />

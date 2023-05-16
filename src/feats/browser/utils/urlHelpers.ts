@@ -18,3 +18,8 @@ export const handleSearch = (
     setUrl(`https://www.google.com/search?q=${searchQuery}`);
   }
 };
+export const isSameWebsite = (currentUrl: string, newUrl: string) => {
+  const urlObj1 = new URL(currentUrl);
+  const urlObj2 = new URL(newUrl);
+  return urlObj1.hostname === urlObj2.hostname;
+};

@@ -1,22 +1,23 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { TouchableOpacity, Animated, StyleSheet, View, } from "react-native";
+import { TouchableOpacity, Animated, StyleSheet, View } from "react-native";
 import { Appbar, Button } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
+import { isSameWebsite } from "./utils/urlHelpers";
+import { applyAllSettingsToWebView } from "./utils/allyHelpers";
 
 const Browser = () => {
-  const { writeSetting } = useAllyStore();
+  const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
-
   //region drawer animation
   const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
-    const openDrawer = () => {
+  const openDrawer = () => {
     Animated.timing(bottomDrawerAnim, {
       toValue: 1,
       duration: 500,
@@ -33,16 +34,10 @@ const Browser = () => {
     }).start(() => setShowSettings(false));
   };
   //endregion
-
-  //set initial value for settings
   const handleMessage = (event: WebViewMessageEvent) => {
     const eventState = JSON.parse(
       event.nativeEvent.data
     ) as Partial<SettingsState>;
-    console.log(
-      eventState,
-      `setting initial value of ${eventState.settingsKey} to ${eventState.initialValue}`
-    );
     writeSetting({
       initialValue: eventState.initialValue,
       settingsKey: eventState.settingsKey,
@@ -64,6 +59,16 @@ const Browser = () => {
         ref={webViewRef}
         source={{ uri: url }}
         onMessage={(event) => handleMessage(event)}
+        onLoadEnd={(navState) => {
+          if (isSameWebsite(url, navState.nativeEvent.url)) {
+            applyAllSettingsToWebView(
+              webViewRef,
+              getAllSettings,
+              getSettingByKey
+            );
+          }
+          setUrl(navState.nativeEvent.url);
+        }}
       />
       {/*Settings*/}
       {showSettings && (
@@ -76,8 +81,6 @@ const Browser = () => {
                   translateY: bottomDrawerAnim.interpolate({
                     inputRange: [0, 1],
                     outputRange: [500, 0],
-                    //clamp: if the input value goes beyond the specified inputRange, the output value will be clamped to the nearest output range value.
-                    extrapolate: "clamp",
                   }),
                 },
               ],
