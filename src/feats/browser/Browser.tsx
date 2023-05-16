@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 import { Animated, StyleSheet, View, StatusBar } from "react-native";
-import { Appbar, Button } from "react-native-paper";
+import { Appbar, Button, IconButton } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
@@ -46,11 +46,19 @@ const Browser = () => {
 
 	return (
 		<>
-			{/*Searchbar*/}
 			<StatusBar barStyle="light-content"/>
 
-			<Appbar.Header dark={false} style={{ backgroundColor: theme.colors.secondary, }}>
-				<Appbar.Action icon="menu" onPress={showSettings ? closeDrawer : openDrawer}/>
+			{/*Searchbar*/}
+			<Appbar.Header style={{ backgroundColor: theme.colors.secondary, }}>
+				<IconButton
+					mode={'contained'}
+					selected={showSettings}
+					role={'button'}
+					accessibilityLabel={'opens and closes accessibility menu'}
+					iconColor={theme.colors.secondary}
+					style={{ backgroundColor: getAllSettings().filter((s) => s.activeStep !== 0).length ? theme.colors.primary : theme.colors.background }}
+					icon="human" onPress={showSettings ? closeDrawer : openDrawer}
+				/>
 				<SearchBar setUrl={setUrl} url={url}/>
 			</Appbar.Header>
 
