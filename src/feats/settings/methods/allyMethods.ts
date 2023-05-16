@@ -96,6 +96,7 @@ export const setParagraphHeight = (
       }
     };
     ref.current?.injectJavaScript(`
+    var body = document.body;
 		var paragraphs = document.querySelectorAll('p');
 		var lineHeight15 = ( parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2) * 1.5;
 	
