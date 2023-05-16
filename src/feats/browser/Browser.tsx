@@ -8,9 +8,10 @@ import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
 import { isSameWebsite } from "./utils/urlHelpers";
+import { applyAllSettingsToWebView } from "./utils/allyHelpers";
 
 const Browser = () => {
-  const { writeSetting } = useAllyStore();
+  const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
   const [url, setUrl] = useState("https://www.sv-kampen.de/");
   const [showSettings, setShowSettings] = useState(false);
   const webViewRef = useRef<WebView | null>(null);
@@ -58,16 +59,19 @@ const Browser = () => {
         ref={webViewRef}
         source={{ uri: url }}
         onMessage={(event) => handleMessage(event)}
-        // onNavigationStateChange={(navState) => console.log('on Navigation change: same website?', navState)}
-        onLoadStart={(navState) => {
-          console.log(
-						'URL', url,
-						'navState.nativeEvent.url', navState.nativeEvent.url,
-            isSameWebsite(url, navState.nativeEvent.url)
-          );
-					setUrl(navState.nativeEvent.url);
+        onLoadEnd={(navState) => {
+          if (isSameWebsite(url, navState.nativeEvent.url)) {
+            console.log(isSameWebsite(url, navState.nativeEvent.url));
+            console.log("old url", url);
+            console.log("new url", navState.nativeEvent.url);
+            applyAllSettingsToWebView(
+              webViewRef,
+              getAllSettings,
+              getSettingByKey
+            );
+          }
+          setUrl(navState.nativeEvent.url);
         }}
-        // onLoadStart={(navState) => console.log('on Load Start', url, navState.nativeEvent.url ,isSameWebsite(url, navState.nativeEvent.url))}
       />
       {/*Settings*/}
       {showSettings && (

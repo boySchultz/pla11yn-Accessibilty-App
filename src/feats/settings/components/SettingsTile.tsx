@@ -7,7 +7,7 @@ import { SettingsState } from "../../../store/StoreTypes";
 import { SettingsKey } from "../settingsConfig";
 
 interface SettingsTileProps {
-  onPress: (
+  allyMethod: (
     ref: React.MutableRefObject<WebView | null>,
     getSettingsState: (
       searchSetting: Partial<SettingsState>
@@ -22,7 +22,7 @@ interface SettingsTileProps {
 export const SettingsTile = ({
   settingsKey,
   title,
-  onPress,
+  allyMethod,
   steps,
   webViewRef,
 }: SettingsTileProps) => {
@@ -34,7 +34,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
-    onPress(webViewRef, getSettingByKey);
+    allyMethod(webViewRef, getSettingByKey);
   };
 
   const handleBack = () => {
@@ -42,7 +42,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === 0 ? 0 : activeStep - 1,
     });
-    onPress(webViewRef, getSettingByKey);
+    allyMethod(webViewRef, getSettingByKey);
   };
 
   return (

@@ -20,7 +20,7 @@ export type SettingsKey =
 
 export interface AllySetting {
   settingsKey: SettingsKey;
-  onPress: (
+  allyMethod: (
     ref: React.MutableRefObject<WebView | null>,
     getSettingsState: (
       searchSetting: Partial<SettingsState>
@@ -33,37 +33,37 @@ export interface AllySetting {
 export const settingsConfig: AllySetting[] = [
   {
     settingsKey: "setTextAlignment",
-    onPress: setTextAlignment,
+    allyMethod: setTextAlignment,
     title: "Text Alignment",
     steps: 3,
   },
   {
     settingsKey: "setFontSize",
-    onPress: setFontSize,
+    allyMethod: setFontSize,
     title: "Font Size",
     steps: 3,
   },
   {
     settingsKey: "setLineHeight",
-    onPress: setLineHeight,
+    allyMethod: setLineHeight,
     title: "Line Height",
     steps: 2,
   },
   {
     settingsKey: "setParagraphHeight",
-    onPress: setParagraphHeight,
+    allyMethod: setParagraphHeight,
     title: "Paragraph Height",
     steps: 2,
   },
   {
     settingsKey: "setLetterSpacing",
-    onPress: setLetterSpacing,
+    allyMethod: setLetterSpacing,
     title: "Letter Spacing",
     steps: 3,
   },
   {
     settingsKey: "setWordSpacing",
-    onPress: setWordSpacing,
+    allyMethod: setWordSpacing,
     title: "Word Spacing",
     steps: 3,
   },
