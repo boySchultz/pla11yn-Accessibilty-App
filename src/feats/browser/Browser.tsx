@@ -61,9 +61,6 @@ const Browser = () => {
         onMessage={(event) => handleMessage(event)}
         onLoadEnd={(navState) => {
           if (isSameWebsite(url, navState.nativeEvent.url)) {
-            console.log(isSameWebsite(url, navState.nativeEvent.url));
-            console.log("old url", url);
-            console.log("new url", navState.nativeEvent.url);
             applyAllSettingsToWebView(
               webViewRef,
               getAllSettings,
