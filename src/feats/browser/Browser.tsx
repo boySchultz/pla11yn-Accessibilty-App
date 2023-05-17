@@ -20,7 +20,6 @@ const Browser = () => {
 	const webViewRef = useRef<WebView | null>(null);
 
 	const currentlyActiveSettings = getAllSettings().filter((s) => s.activeStep !== 0);
-	console.log('currentlyActiveSettings', currentlyActiveSettings);
 
 	//region drawer animation
 	const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
@@ -118,6 +117,7 @@ const Browser = () => {
 								Enable Ally Settings:
 							</Text>
 							<Switch
+								disabled={!currentlyActiveSettings.length}
 								trackColor={{ true: theme.colors.switchTrackTrue }}
 								thumbColor={settingsEnabled ? theme.colors.primary : theme.colors.background}
 								onValueChange={() => {
