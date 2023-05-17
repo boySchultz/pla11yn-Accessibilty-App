@@ -8,7 +8,7 @@ import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
 import { isSameWebsite } from "./utils/urlHelpers";
-import { applyAllSettingsToWebView } from "./utils/allyHelpers";
+import { applyAllSettingsToWebView, disableSettings } from "./utils/allyHelpers";
 import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIconActive";
 import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
@@ -120,8 +120,17 @@ const Browser = () => {
 							<Switch
 								trackColor={{ true: theme.colors.switchTrackTrue }}
 								thumbColor={settingsEnabled ? theme.colors.primary : theme.colors.background}
-								ios_backgroundColor="#3e3e3e"
-								onValueChange={() => setSettingsEnabled(!settingsEnabled)}
+								onValueChange={() => {
+									settingsEnabled ?
+										applyAllSettingsToWebView(
+											webViewRef,
+											getAllSettings,
+											getSettingByKey
+										) : disableSettings(webViewRef,
+											getAllSettings,
+											getSettingByKey, 0);
+									setSettingsEnabled(!settingsEnabled)
+								}}
 								value={settingsEnabled}
 							/>
 						</View>
