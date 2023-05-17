@@ -3,18 +3,14 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
 import { useAllyStore } from "../../../store/allyStore";
-import { SettingsState } from "../../../store/StoreTypes";
 import { SettingsKey } from "../settingsConfig";
 import theme from "../../../../theme";
+import { AllyMethodParameters } from "../methods/allyMethods";
 
 
 interface SettingsTileProps {
-  allyMethod: (
-    ref: React.MutableRefObject<WebView | null>,
-    getSettingsState: (
-      searchSetting: Partial<SettingsState>
-    ) => SettingsState | undefined
-  ) => void;
+  allyMethod: (params: AllyMethodParameters) => void;
+
   webViewRef: React.MutableRefObject<WebView | null>;
   title: string;
   steps: number;
@@ -36,7 +32,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
-    allyMethod(webViewRef, getSettingByKey);
+    allyMethod({ref: webViewRef, getSettingsState: getSettingByKey});
   };
 
   const handleBack = () => {
@@ -44,7 +40,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === 0 ? 0 : activeStep - 1,
     });
-    allyMethod(webViewRef, getSettingByKey);
+    allyMethod({ref: webViewRef, getSettingsState: getSettingByKey});
   };
 
   return (
