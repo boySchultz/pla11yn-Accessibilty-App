@@ -9,7 +9,8 @@ import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
 import { isSameWebsite } from "./utils/urlHelpers";
 import { applyAllSettingsToWebView } from "./utils/allyHelpers";
-import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIcon";
+import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIconActive";
+import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
 	const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
@@ -17,6 +18,10 @@ const Browser = () => {
 	const [showSettings, setShowSettings] = useState(false);
 	const [settingsEnabled, setSettingsEnabled] = useState(false);
 	const webViewRef = useRef<WebView | null>(null);
+
+	const currentlyActiveSettings = getAllSettings().filter((s) => s.activeStep !== 0);
+	console.log('currentlyActiveSettings', currentlyActiveSettings);
+
 	//region drawer animation
 	const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
 	const openDrawer = () => {
@@ -49,7 +54,6 @@ const Browser = () => {
 	return (
 		<>
 			<StatusBar barStyle="light-content"/>
-
 			{/*Searchbar*/}
 			<Appbar.Header style={{ backgroundColor: theme.colors.secondary, }}>
 				<IconButton
@@ -57,8 +61,9 @@ const Browser = () => {
 					role={'button'}
 					accessibilityLabel={'opens and closes accessibility menu'}
 					iconColor={theme.colors.secondary}
-					style={{ height: 48, width: 48 ,backgroundColor: getAllSettings().filter((s) => s.activeStep !== 0).length ? theme.colors.primary : theme.colors.background }}
-					icon={()=><AccessibilityMenuIconActive/>} onPress={showSettings ? closeDrawer : openDrawer}
+					style={{ height: 52, width: 52 ,backgroundColor: currentlyActiveSettings.length ? theme.colors.primary : theme.colors.background }}
+					/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
+					icon={()=>currentlyActiveSettings.length ? <AccessibilityMenuIconActive/> : <AccessibilityMenuIcon/>} onPress={showSettings ? closeDrawer : openDrawer}
 				/>
 
 				<SearchBar setUrl={setUrl} url={url}/>
