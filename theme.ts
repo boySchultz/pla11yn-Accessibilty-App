@@ -8,6 +8,8 @@ const theme = {
 		primary: '#efc410',
 		secondary: '#223046',
 		background: '#F5F5F5',
+		switchTrackFalse: '#223046B3',
+		switchTrackTrue:'#EFC4107F'
 	},
 	ally:{
 		text: {

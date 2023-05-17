@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { Animated, StyleSheet, View, StatusBar } from "react-native";
+import { Animated, StyleSheet, View, StatusBar, Switch } from "react-native";
 import { Appbar, Button, IconButton, Text } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
@@ -61,9 +61,14 @@ const Browser = () => {
 					role={'button'}
 					accessibilityLabel={'opens and closes accessibility menu'}
 					iconColor={theme.colors.secondary}
-					style={{ height: 52, width: 52 ,backgroundColor: currentlyActiveSettings.length ? theme.colors.primary : theme.colors.background }}
+					style={{
+						height: 52,
+						width: 52,
+						backgroundColor: currentlyActiveSettings.length ? theme.colors.primary : theme.colors.background
+					}}
 					/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
-					icon={()=>currentlyActiveSettings.length ? <AccessibilityMenuIconActive/> : <AccessibilityMenuIcon/>} onPress={showSettings ? closeDrawer : openDrawer}
+					icon={() => currentlyActiveSettings.length ? <AccessibilityMenuIconActive/> : <AccessibilityMenuIcon/>}
+					onPress={showSettings ? closeDrawer : openDrawer}
 				/>
 
 				<SearchBar setUrl={setUrl} url={url}/>
@@ -104,14 +109,20 @@ const Browser = () => {
 					]}
 				>
 					<AllySettings webViewRef={webViewRef}/>
-					<View style={{ flexDirection: 'column', justifyContent:'space-evenly', padding: 18 }}>
-						<View style={{ flexDirection: 'row', justifyContent:'space-between'}}>
-							<Text style={{color: theme.colors.primary}} variant={'labelLarge'}>
-								Enable Ally Settings
+					<View style={{ flexDirection: 'column', justifyContent: 'space-evenly', padding: 18 }}>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems:'center' }}>
+							<Text style={{ ...theme.ally.text, color: settingsEnabled ? theme.colors.primary : theme.colors.background }} variant={'labelLarge'}>
+								Enable Ally Settings:
 							</Text>
-							<Button style={{borderWidth: 2}} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
+							<Switch
+								trackColor={{true: theme.colors.switchTrackTrue}}
+								thumbColor={settingsEnabled ? theme.colors.primary : theme.colors.background}
+								ios_backgroundColor="#3e3e3e"
+								onValueChange={()=>setSettingsEnabled(!settingsEnabled)}
+								value={settingsEnabled}
+							/>
 						</View>
-						<Button style={{borderWidth: 2}} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
+						<Button style={{ borderWidth: 2 }} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
 					</View>
 				</Animated.View>
 			)}

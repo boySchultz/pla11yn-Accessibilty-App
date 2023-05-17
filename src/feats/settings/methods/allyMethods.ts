@@ -151,7 +151,7 @@ export const setLetterSpacing = (params: AllyMethodParameters) => {
 			}
 		};
 		ref.current?.injectJavaScript(`
-		document.body.style.letterSpacing = '${letterSpacing(
+		document.body.style.letterSpacing = '${letterSpacing(step ??
 			settingsState.activeStep
 		)}';
 		`);
