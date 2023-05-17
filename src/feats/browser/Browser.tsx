@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 import { Animated, StyleSheet, View, StatusBar } from "react-native";
-import { Appbar, Button, IconButton } from "react-native-paper";
+import { Appbar, Button, IconButton, Text } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
@@ -9,11 +9,13 @@ import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
 import { isSameWebsite } from "./utils/urlHelpers";
 import { applyAllSettingsToWebView } from "./utils/allyHelpers";
+import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
 	const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
 	const [url, setUrl] = useState("https://www.sv-kampen.de/");
 	const [showSettings, setShowSettings] = useState(false);
+	const [settingsEnabled, setSettingsEnabled] = useState(false);
 	const webViewRef = useRef<WebView | null>(null);
 	//region drawer animation
 	const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
@@ -51,16 +53,17 @@ const Browser = () => {
 			{/*Searchbar*/}
 			<Appbar.Header style={{ backgroundColor: theme.colors.secondary, }}>
 				<IconButton
-					mode={'contained'}
 					selected={showSettings}
 					role={'button'}
 					accessibilityLabel={'opens and closes accessibility menu'}
 					iconColor={theme.colors.secondary}
-					style={{ backgroundColor: getAllSettings().filter((s) => s.activeStep !== 0).length ? theme.colors.primary : theme.colors.background }}
-					icon="human" onPress={showSettings ? closeDrawer : openDrawer}
+					style={{ height: 48, width: 48 ,backgroundColor: getAllSettings().filter((s) => s.activeStep !== 0).length ? theme.colors.primary : theme.colors.background }}
+					icon={()=><AccessibilityMenuIconActive/>} onPress={showSettings ? closeDrawer : openDrawer}
 				/>
+
 				<SearchBar setUrl={setUrl} url={url}/>
 			</Appbar.Header>
+
 
 			{/*WebView*/}
 			<WebView
@@ -96,8 +99,14 @@ const Browser = () => {
 					]}
 				>
 					<AllySettings webViewRef={webViewRef}/>
-					<View style={{ padding: 16 }}>
-						<Button mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
+					<View style={{ flexDirection: 'column', justifyContent:'space-evenly', padding: 18 }}>
+						<View style={{ flexDirection: 'row', justifyContent:'space-between'}}>
+							<Text style={{color: theme.colors.primary}} variant={'labelLarge'}>
+								Enable Ally Settings
+							</Text>
+							<Button style={{borderWidth: 2}} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
+						</View>
+						<Button style={{borderWidth: 2}} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
 					</View>
 				</Animated.View>
 			)}

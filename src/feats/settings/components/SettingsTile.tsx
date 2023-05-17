@@ -5,6 +5,8 @@ import { WebView } from "react-native-webview";
 import { useAllyStore } from "../../../store/allyStore";
 import { SettingsState } from "../../../store/StoreTypes";
 import { SettingsKey } from "../settingsConfig";
+import theme from "../../../../theme";
+
 
 interface SettingsTileProps {
   allyMethod: (
@@ -50,7 +52,7 @@ export const SettingsTile = ({
       style={{ ...styles.container, borderWidth: activeStep === 0 ? 2 : 4 }}
       onPress={() => handleNext()}
     >
-      <Text style={styles.text}>{title}</Text>
+      <Text style={theme.ally.text}>{title}</Text>
       <Stepper
         steps={steps}
         activeStep={activeStep}
@@ -69,12 +71,5 @@ const styles = StyleSheet.create({
     borderColor: "#000",
     borderRadius: 10,
   },
-  text: {
-    fontWeight: "bold",
-    padding: 8,
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0.7,
-    borderBottomWidth: 1,
-  },
 });
+
