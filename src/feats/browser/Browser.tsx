@@ -110,19 +110,26 @@ const Browser = () => {
 				>
 					<AllySettings webViewRef={webViewRef}/>
 					<View style={{ flexDirection: 'column', justifyContent: 'space-evenly', padding: 18 }}>
-						<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems:'center' }}>
-							<Text style={{ ...theme.ally.text, color: settingsEnabled ? theme.colors.primary : theme.colors.background }} variant={'labelLarge'}>
+						<View
+							style={{ marginBottom: 8, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+							<Text
+								style={{ ...theme.ally.text, color: settingsEnabled ? theme.colors.primary : theme.colors.background }}
+								variant={'labelLarge'}>
 								Enable Ally Settings:
 							</Text>
 							<Switch
-								trackColor={{true: theme.colors.switchTrackTrue}}
+								trackColor={{ true: theme.colors.switchTrackTrue }}
 								thumbColor={settingsEnabled ? theme.colors.primary : theme.colors.background}
 								ios_backgroundColor="#3e3e3e"
-								onValueChange={()=>setSettingsEnabled(!settingsEnabled)}
+								onValueChange={() => setSettingsEnabled(!settingsEnabled)}
 								value={settingsEnabled}
 							/>
 						</View>
-						<Button style={{ borderWidth: 2 }} mode={'outlined'} onPress={closeDrawer}>Close Menu</Button>
+						<Button style={{ borderWidth: 2 }} mode={'outlined'} onPress={closeDrawer}>
+							<Text style={{ ...theme.ally.text, color: theme.colors.background }} variant={'labelLarge'}>
+								Close Settings
+							</Text>
+						</Button>
 					</View>
 				</Animated.View>
 			)}
