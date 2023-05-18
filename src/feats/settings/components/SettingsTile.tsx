@@ -7,7 +7,6 @@ import { SettingsKey } from "../settingsConfig";
 import theme from "../../../../theme";
 import { AllyMethodParameters } from "../methods/allyMethods";
 
-
 interface SettingsTileProps {
   allyMethod: (params: AllyMethodParameters) => void;
 
@@ -32,7 +31,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
-    allyMethod({ref: webViewRef, getSettingsState: getSettingByKey});
+    allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey });
   };
 
   const handleBack = () => {
@@ -40,7 +39,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === 0 ? 0 : activeStep - 1,
     });
-    allyMethod({ref: webViewRef, getSettingsState: getSettingByKey});
+    allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey });
   };
 
   return (
@@ -68,4 +67,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-

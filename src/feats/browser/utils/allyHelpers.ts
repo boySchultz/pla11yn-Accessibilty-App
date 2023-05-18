@@ -14,7 +14,7 @@ export const applyAllSettingsToWebView = (
   getAllSettings().forEach((setting) =>
     settingsConfig
       .find((sc) => sc.settingsKey === setting.settingsKey)
-      ?.allyMethod({ref: webViewRef, getSettingsState: getSettingByKey})
+      ?.allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey })
   );
 };
 
@@ -24,12 +24,16 @@ export const disableSettings = (
   getSettingByKey: (
     searchSetting: Partial<SettingsState>
   ) => SettingsState | undefined,
-  step: number,
+  step: number
 ) => {
   if (!webViewRef) return;
   getAllSettings().forEach((setting) =>
     settingsConfig
       .find((sc) => sc.settingsKey === setting.settingsKey)
-      ?.allyMethod({ref: webViewRef, getSettingsState: getSettingByKey, step: step})
+      ?.allyMethod({
+        ref: webViewRef,
+        getSettingsState: getSettingByKey,
+        step: step,
+      })
   );
-}
+};
