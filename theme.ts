@@ -9,7 +9,7 @@ const theme = {
 		secondary: '#223046',
 		background: '#F5F5F5',
 		switchTrackFalse: '#223046B3',
-		switchTrackTrue:'#EFC4107F'
+		switchTrackTrue:'#EFC41033'
 	},
 	ally:{
 		text: {

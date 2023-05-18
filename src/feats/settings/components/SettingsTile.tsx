@@ -14,6 +14,7 @@ interface SettingsTileProps {
   title: string;
   steps: number;
   settingsKey: SettingsKey;
+  settingsEnabled: boolean;
 }
 
 export const SettingsTile = ({
@@ -22,6 +23,7 @@ export const SettingsTile = ({
   allyMethod,
   steps,
   webViewRef,
+  settingsEnabled,
 }: SettingsTileProps) => {
   const { getSettingByKey, writeSetting } = useAllyStore();
   const settingsState = getSettingByKey({ settingsKey: settingsKey });
@@ -31,7 +33,11 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
-    allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey });
+    allyMethod({
+      ref: webViewRef,
+      getSettingsState: getSettingByKey,
+      step: settingsEnabled ? undefined : 0,
+    });
   };
 
   const handleBack = () => {

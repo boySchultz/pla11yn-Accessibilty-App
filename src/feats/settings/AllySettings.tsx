@@ -7,12 +7,18 @@ import theme from "../../../theme";
 
 interface AllySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
+  settingsEnabled: boolean;
 }
-export const AllySettings = ({ webViewRef }: AllySettingsProps) => {
+
+export const AllySettings = ({
+  webViewRef,
+  settingsEnabled,
+}: AllySettingsProps) => {
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
         <SettingsTile
+          settingsEnabled={settingsEnabled}
           webViewRef={webViewRef}
           settingsKey={item.settingsKey}
           allyMethod={item.allyMethod}
