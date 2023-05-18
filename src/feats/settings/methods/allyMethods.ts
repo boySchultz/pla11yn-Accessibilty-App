@@ -30,13 +30,13 @@ export const setLineHeight = (params: AllyMethodParameters) => {
 	const settingsState = getSettingsState({ settingsKey: "setLineHeight" });
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
-		var body = document.body;
-		var lineHeight = (parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
-		window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setLineHeight', initialValue: lineHeight }));
+			var body = document.body;
+			var lineHeight = (parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize)).toFixed(2);
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setLineHeight', initialValue: lineHeight }));
 		`);
 		if (step !== 0) {
 			ref.current?.injectJavaScript(`
-      body.style.lineHeight = '1.5em'; // lineSpacing(1)
+        body.style.lineHeight = '1.5em'; // lineSpacing(1)
 		`);
 		}
 	} else {
@@ -61,29 +61,29 @@ export const setParagraphHeight = (params: AllyMethodParameters) => {
 	const settingsState = getSettingsState({ settingsKey: "setParagraphHeight" });
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
-		var body = document.body;
-		var firstParagraph = document.querySelector('p') || 0;
-		var paragraphHeight = ( parseFloat(window.getComputedStyle(firstParagraph).getPropertyValue('margin-bottom')) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2);
-
-		window.ReactNativeWebView.postMessage(JSON.stringify({
-			settingsKey: 'setParagraphHeight',
-			initialValue: paragraphHeight
-		}));
+			var body = document.body;
+			var firstParagraph = document.querySelector('p') || 0;
+			var paragraphHeight = ( parseFloat(window.getComputedStyle(firstParagraph).getPropertyValue('margin-bottom')) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2);
+	
+			window.ReactNativeWebView.postMessage(JSON.stringify({
+				settingsKey: 'setParagraphHeight',
+				initialValue: paragraphHeight
+			}));
 		`);
 		if (step !== 0) {
 			ref.current?.injectJavaScript(`
-			var lineHeight15 = ( parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2) * 1.5;
-			var paragraphs = document.querySelectorAll('p');
-			// 1.4.8(AAA): paragraph spacing is at least 1.5 times larger than the line spacing.
-			if (lineHeight15 > 2) {
-				paragraphs.forEach((p) => {
-					p.style.marginBottom = lineHeight15 + 'em';
-				});
-			} else {
-				paragraphs.forEach((p) => {
-					p.style.marginBottom = '2em';
-				});
-			}
+				var lineHeight15 = ( parseFloat(window.getComputedStyle(body).lineHeight) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2) * 1.5;
+				var paragraphs = document.querySelectorAll('p');
+				// 1.4.8(AAA): paragraph spacing is at least 1.5 times larger than the line spacing.
+				if (lineHeight15 > 2) {
+					paragraphs.forEach((p) => {
+						p.style.marginBottom = lineHeight15 + 'em';
+					});
+				} else {
+					paragraphs.forEach((p) => {
+						p.style.marginBottom = '2em';
+					});
+				}
 			`);
 		}
 	} else {
@@ -164,9 +164,9 @@ export const setWordSpacing = (params: AllyMethodParameters) => {
 	const settingsState = getSettingsState({ settingsKey: "setWordSpacing" });
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
-		var body = document.body;
-		var wordSpacing = ( parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2);
-		window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setWordSpacing', initialValue: wordSpacing }));
+			var body = document.body;
+			var wordSpacing = ( parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2);
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setWordSpacing', initialValue: wordSpacing }));
 		`);
 		if (step !== 0) {
 			ref.current?.injectJavaScript(`
@@ -197,13 +197,13 @@ export const setFontSize = (params: AllyMethodParameters) => {
 	const settingsState = getSettingsState({ settingsKey: "setFontSize" });
 	if (settingsState?.initialValue === undefined) {
 		ref.current?.injectJavaScript(`
-	var fontSize = parseFloat(window.getComputedStyle(document.body).fontSize);
-	window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setFontSize', initialValue: fontSize }));
-	`);
+			var fontSize = parseFloat(window.getComputedStyle(document.body).fontSize);
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setFontSize', initialValue: fontSize }));
+			`);
 		if (step !== 0) {
 			ref.current?.injectJavaScript(`
-	document.body.style.fontSize = fontSize * 1.33 + 'px'; //wordSpacing(1);
-	`);
+			document.body.style.fontSize = fontSize * 1.33 + 'px'; //wordSpacing(1);
+			`);
 		}
 	} else {
 		const fontSize = (steps: number) => {
@@ -230,17 +230,22 @@ export const setTextAlignment = (params: AllyMethodParameters) => {
 
 		if (settingsState?.initialValue === undefined) {
 			ref.current?.injectJavaScript(`
-var textAlignment = window.getComputedStyle(document.body).textAlign;
-window.ReactNativeWebView.postMessage(JSON.stringify({
-	settingsKey: 'setTextAlignment',
-	initialValue: textAlignment
-}));
-if (textAlignment === 'start') {
-	document.body.style.textAlign = 'center'; //textAlignment(1);
-} else {
-	document.body.style.textAlign = 'start'; //textAlignment(1);
-}
-`);
+				var textAlignment = window.getComputedStyle(document.body).textAlign;
+				window.ReactNativeWebView.postMessage(JSON.stringify({
+					settingsKey: 'setTextAlignment',
+					initialValue: textAlignment
+				}));
+				`);
+			if (step !== 0) {
+				ref.current?.injectJavaScript(`
+					var textAlignment = window.getComputedStyle(document.body).textAlign;
+					if (textAlignment === 'start') {
+						document.body.style.textAlign = 'center'; //textAlignment(1);
+					} else {
+						document.body.style.textAlign = 'start'; //textAlignment(1);
+					}
+				`);
+			}
 		} else {
 			const alignments = ["start", "center", "end", "justify"].filter(
 				(a) => a !== settingsState?.initialValue
@@ -259,15 +264,7 @@ if (textAlignment === 'start') {
 						return settingsState.initialValue;
 				}
 			};
-			ref.current?.injectJavaScript(
-				`
-document.body.style.textAlign = '${textAlignment(
-					step ?? settingsState.activeStep
-				)
-				}
-';`
-			)
-			;
+			ref.current?.injectJavaScript(`document.body.style.textAlign = '${textAlignment(step ?? settingsState.activeStep)}';`);
 		}
 	}
 ;
