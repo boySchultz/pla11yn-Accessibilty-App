@@ -82,9 +82,7 @@ const Browser = () => {
 						height: 52,
 						width: 52,
 						backgroundColor:
-							settingsEnabled || currentlyActiveSettings.length
-								? theme.colors.primary
-								: theme.colors.background,
+							settingsEnabled ? theme.colors.primary : theme.colors.background,
 					}}
 					/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
 					icon={() =>
