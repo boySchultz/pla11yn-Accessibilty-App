@@ -134,9 +134,12 @@ export const setLetterSpacing = (params: AllyMethodParameters) => {
 					settingsKey: 'setLetterSpacing',
 					initialValue: bodyStyles.letterSpacing / bodyStyles.fontSize
 				}));
-			}
+			}`);
+		if (step !== 0) {
+			ref.current?.injectJavaScript(`
 			body.style.letterSpacing = '0.12em'; //letterSpacing(1)
-			`);
+			`)
+		}
 	} else {
 		const letterSpacing = (steps: number) => {
 			switch (steps) {
