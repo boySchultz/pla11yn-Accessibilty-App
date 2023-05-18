@@ -167,8 +167,12 @@ export const setWordSpacing = (params: AllyMethodParameters) => {
 		var body = document.body;
 		var wordSpacing = ( parseFloat(window.getComputedStyle(body).wordSpacing) / parseFloat(window.getComputedStyle(body).fontSize) ).toFixed(2);
 		window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setWordSpacing', initialValue: wordSpacing }));
-		body.style.wordSpacing = '0.16em' //wordSpacing(1);
-			`);
+		`);
+		if (step !== 0) {
+			ref.current?.injectJavaScript(`
+     		body.style.wordSpacing = '0.16em'; //wordSpacing(1);
+		`);
+		}
 	} else {
 		const wordSpacing = (steps: number) => {
 			switch (steps) {
@@ -184,14 +188,7 @@ export const setWordSpacing = (params: AllyMethodParameters) => {
 					return settingsState.initialValue;
 			}
 		};
-		ref.current?.injectJavaScript(`
-		document.body.style.wordSpacing = '${wordSpacing(
-			step ?? settingsState.activeStep
-		)
-		}
-	em
-	';
-		`);
+		ref.current?.injectJavaScript(`document.body.style.wordSpacing = '${wordSpacing(step ?? settingsState.activeStep)}em';`);
 	}
 };
 
