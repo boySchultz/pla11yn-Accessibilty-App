@@ -3,20 +3,18 @@ import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Stepper } from "./Stepper";
 import { WebView } from "react-native-webview";
 import { useAllyStore } from "../../../store/allyStore";
-import { SettingsState } from "../../../store/StoreTypes";
 import { SettingsKey } from "../settingsConfig";
+import theme from "../../../../theme";
+import { AllyMethodParameters } from "../methods/allyMethods";
 
 interface SettingsTileProps {
-  allyMethod: (
-    ref: React.MutableRefObject<WebView | null>,
-    getSettingsState: (
-      searchSetting: Partial<SettingsState>
-    ) => SettingsState | undefined
-  ) => void;
+  allyMethod: (params: AllyMethodParameters) => void;
+
   webViewRef: React.MutableRefObject<WebView | null>;
   title: string;
   steps: number;
   settingsKey: SettingsKey;
+  settingsEnabled: boolean;
 }
 
 export const SettingsTile = ({
@@ -25,6 +23,7 @@ export const SettingsTile = ({
   allyMethod,
   steps,
   webViewRef,
+  settingsEnabled,
 }: SettingsTileProps) => {
   const { getSettingByKey, writeSetting } = useAllyStore();
   const settingsState = getSettingByKey({ settingsKey: settingsKey });
@@ -34,7 +33,11 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === steps ? 0 : activeStep + 1,
     });
-    allyMethod(webViewRef, getSettingByKey);
+    allyMethod({
+      ref: webViewRef,
+      getSettingsState: getSettingByKey,
+      step: settingsEnabled ? undefined : 0,
+    });
   };
 
   const handleBack = () => {
@@ -42,7 +45,7 @@ export const SettingsTile = ({
       settingsKey: settingsKey,
       activeStep: activeStep === 0 ? 0 : activeStep - 1,
     });
-    allyMethod(webViewRef, getSettingByKey);
+    allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey });
   };
 
   return (
@@ -50,7 +53,7 @@ export const SettingsTile = ({
       style={{ ...styles.container, borderWidth: activeStep === 0 ? 2 : 4 }}
       onPress={() => handleNext()}
     >
-      <Text style={styles.text}>{title}</Text>
+      <Text style={theme.ally.text}>{title}</Text>
       <Stepper
         steps={steps}
         activeStep={activeStep}
@@ -68,13 +71,5 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderColor: "#000",
     borderRadius: 10,
-  },
-  text: {
-    fontWeight: "bold",
-    padding: 8,
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0.7,
-    borderBottomWidth: 1,
   },
 });

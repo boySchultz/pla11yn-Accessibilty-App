@@ -5,10 +5,8 @@ import {
   setLetterSpacing,
   setFontSize,
   setTextAlignment,
+  AllyMethodParameters,
 } from "./methods/allyMethods";
-import React from "react";
-import { WebView } from "react-native-webview";
-import { SettingsState } from "../../store/StoreTypes";
 
 export type SettingsKey =
   | "setWordSpacing"
@@ -20,12 +18,7 @@ export type SettingsKey =
 
 export interface AllySetting {
   settingsKey: SettingsKey;
-  allyMethod: (
-    ref: React.MutableRefObject<WebView | null>,
-    getSettingsState: (
-      searchSetting: Partial<SettingsState>
-    ) => SettingsState | undefined
-  ) => void;
+  allyMethod: (params: AllyMethodParameters) => void;
   title: string;
   steps: number;
 }
