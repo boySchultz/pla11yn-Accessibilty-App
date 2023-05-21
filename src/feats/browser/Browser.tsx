@@ -72,7 +72,7 @@ const Browser = () => {
 	return (
 		<>
 			<StatusBar barStyle="light-content"/>
-			<Appbar.Header style={{ paddingBottom: 8 ,backgroundColor: theme.colors.secondary }}>
+			<Appbar.Header style={{ padding: 8, backgroundColor: theme.colors.secondary }}>
 				<IconButton
 					selected={showSettings}
 					role={"button"}
@@ -83,15 +83,15 @@ const Browser = () => {
 						width: 52,
 						backgroundColor:
 							settingsEnabled ? theme.colors.primary : theme.colors.background,
-						marginRight:16,
+						marginRight: 16,
 						marginLeft: 8,
 					}}
 					/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
 					icon={() =>
 						currentlyActiveSettings.length ? (
-							<AccessibilityMenuIconActive/>
+							<AccessibilityMenuIconActive menuOpen={showSettings}/>
 						) : (
-							<AccessibilityMenuIcon/>
+							<AccessibilityMenuIcon menuOpen={showSettings}/>
 						)
 					}
 					onPress={showSettings ? closeDrawer : openDrawer}
