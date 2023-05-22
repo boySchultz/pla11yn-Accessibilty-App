@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import { Animated, StyleSheet, View, StatusBar, Switch } from "react-native";
+import { Animated, StyleSheet, View, StatusBar, Switch, Platform, KeyboardAvoidingView } from "react-native";
 import { Appbar, Button, IconButton, Text } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
@@ -72,131 +72,138 @@ const Browser = () => {
 	return (
 		<>
 			<StatusBar barStyle="light-content"/>
-			<Appbar.Header style={{ padding: 8, backgroundColor: theme.colors.secondary }}>
-				<IconButton
-					selected={showSettings}
-					role={"button"}
-					accessibilityLabel={"opens and closes accessibility menu"}
-					iconColor={theme.colors.secondary}
-					style={{
-						height: 52,
-						width: 52,
-						backgroundColor:
-							settingsEnabled ? theme.colors.primary : theme.colors.background,
-						marginRight: 16,
-						marginLeft: 8,
+			<KeyboardAvoidingView
+				style={{ flex: 1 }}
+				behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+			>
+
+				<Appbar.Header style={{ padding: 8, backgroundColor: theme.colors.secondary }}>
+					<IconButton
+						selected={showSettings}
+						role={"button"}
+						accessibilityLabel={"opens and closes accessibility menu"}
+						iconColor={theme.colors.secondary}
+						style={{
+							height: 52,
+							width: 52,
+							backgroundColor:
+								settingsEnabled ? theme.colors.primary : theme.colors.background,
+							marginRight: 16,
+							marginLeft: 8,
+						}}
+						/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
+						icon={() =>
+							currentlyActiveSettings.length ? (
+								<AccessibilityMenuIconActive menuOpen={showSettings}/>
+							) : (
+								<AccessibilityMenuIcon menuOpen={showSettings}/>
+							)
+						}
+						onPress={showSettings ? closeDrawer : openDrawer}
+					/>
+					<SearchBar setUrl={setUrl} url={url}/>
+				</Appbar.Header>
+
+
+				{/*WebView*/}
+				<WebView
+					ref={webViewRef}
+					source={{ uri: url }}
+					onMessage={(event) => handleMessage(event)}
+					onLoadEnd={(navState) => {
+						setUrl(navState.nativeEvent.url);
 					}}
-					/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
-					icon={() =>
-						currentlyActiveSettings.length ? (
-							<AccessibilityMenuIconActive menuOpen={showSettings}/>
-						) : (
-							<AccessibilityMenuIcon menuOpen={showSettings}/>
-						)
-					}
-					onPress={showSettings ? closeDrawer : openDrawer}
 				/>
 
-				<SearchBar setUrl={setUrl} url={url}/>
-			</Appbar.Header>
-
-			{/*WebView*/}
-			<WebView
-				ref={webViewRef}
-				source={{ uri: url }}
-				onMessage={(event) => handleMessage(event)}
-				onLoadEnd={(navState) => {
-					setUrl(navState.nativeEvent.url);
-				}}
-			/>
-			{/*Settings*/}
-			{showSettings && (
-				<Animated.View
-					style={[
-						styles.drawer,
-						{
-							transform: [
-								{
-									translateY: bottomDrawerAnim.interpolate({
-										inputRange: [0, 1],
-										outputRange: [500, 0],
-									}),
-								},
-							],
-						},
-					]}
-				>
-					<AllySettings
-						webViewRef={webViewRef}
-						settingsEnabled={settingsEnabled}
-					/>
-					<View
-						style={{
-							flexDirection: "column",
-							justifyContent: "space-evenly",
-							padding: 18,
-						}}
+				{/*Settings*/}
+				{showSettings && (
+					<Animated.View
+						style={[
+							styles.drawer,
+							{
+								transform: [
+									{
+										translateY: bottomDrawerAnim.interpolate({
+											inputRange: [0, 1],
+											outputRange: [500, 0],
+										}),
+									},
+								],
+							},
+						]}
 					>
+						<AllySettings
+							webViewRef={webViewRef}
+							settingsEnabled={settingsEnabled}
+						/>
 						<View
 							style={{
-								marginBottom: 8,
-								flexDirection: "row",
-								justifyContent: "space-between",
-								alignItems: "center",
+								flexDirection: "column",
+								justifyContent: "space-evenly",
+								padding: 18,
 							}}
 						>
-							<Text
+							<View
 								style={{
-									...theme.ally.text,
-									color: settingsEnabled
-										? theme.colors.primary
-										: theme.colors.background,
+									marginBottom: 8,
+									flexDirection: "row",
+									justifyContent: "space-between",
+									alignItems: "center",
 								}}
-								variant={"labelLarge"}
 							>
-								Ally Settings Enabled
-							</Text>
-							<Switch
-								value={settingsEnabled}
-								onValueChange={() => {
-									!settingsEnabled
-										? applyAllSettingsToWebView(
-											webViewRef,
-											getAllSettings,
-											getSettingByKey
-										)
-										: disableSettings(
-											webViewRef,
-											getAllSettings,
-											getSettingByKey,
-											0
-										);
+								<Text
+									style={{
+										...theme.ally.text,
+										color: settingsEnabled
+											? theme.colors.primary
+											: theme.colors.background,
+									}}
+									variant={"labelLarge"}
+								>
+									Ally Settings Enabled
+								</Text>
+								<Switch
+									value={settingsEnabled}
+									onValueChange={() => {
+										!settingsEnabled
+											? applyAllSettingsToWebView(
+												webViewRef,
+												getAllSettings,
+												getSettingByKey
+											)
+											: disableSettings(
+												webViewRef,
+												getAllSettings,
+												getSettingByKey,
+												0
+											);
 
-									setSettingsEnabled(!settingsEnabled);
-								}}
-								trackColor={{ true: theme.colors.switchTrackTrue }}
-								thumbColor={
-									settingsEnabled
-										? theme.colors.primary
-										: theme.colors.background
-								}
-							/>
-						</View>
-						<Button
-							style={{ borderWidth: 2 }}
-							mode={"outlined"}
-							onPress={closeDrawer}
-						>
-							<Text
-								style={{ ...theme.ally.text, color: theme.colors.background }}
-								variant={"labelLarge"}
+										setSettingsEnabled(!settingsEnabled);
+									}}
+									trackColor={{ true: theme.colors.switchTrackTrue }}
+									thumbColor={
+										settingsEnabled
+											? theme.colors.primary
+											: theme.colors.background
+									}
+								/>
+							</View>
+							<Button
+								style={{ borderWidth: 2 }}
+								mode={"outlined"}
+								onPress={closeDrawer}
 							>
-								Close Settings
-							</Text>
-						</Button>
-					</View>
-				</Animated.View>
-			)}
+								<Text
+									style={{ ...theme.ally.text, color: theme.colors.background }}
+									variant={"labelLarge"}
+								>
+									Close Settings
+								</Text>
+							</Button>
+						</View>
+					</Animated.View>
+				)}
+			</KeyboardAvoidingView>
 		</>
 	);
 };

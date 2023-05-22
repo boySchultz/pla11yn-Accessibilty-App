@@ -17,23 +17,23 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 	}, [url]);
 
 	return (
-		<>
-			<TextInput
-				placeholder="Search or enter URL"
-				textContentType={"URL"}
-				style={styles.input}
-				value={inputText}
-				onChangeText={(change) => setInputText(change)}
-				numberOfLines={1}
-				role="searchbox"
-				aria-label="Search or enter URL"
-				right={<TextInput.Icon iconColor={theme.colors.secondary} size={40} aria-label="Search" role="button"
-				                       icon='magnify'
-				                       onPress={() => handleSearch(inputText, setUrl)}/>}
-			/>
-		</>
-	)
-		;
+		<TextInput
+			placeholder="Search or enter URL"
+			textContentType={"URL"}
+			style={styles.input}
+			value={inputText}
+			onChangeText={(change) => setInputText(change)}
+			numberOfLines={1}
+			role="searchbox"
+			aria-label="Search or enter URL"
+			right={
+				<TextInput.Icon
+					iconColor={theme.colors.secondary} size={40} aria-label="Search" role="button"
+					icon='magnify'
+					onPress={() => handleSearch(inputText, setUrl)}
+				/>}
+		/>
+	);
 };
 
 const styles = StyleSheet.create({
