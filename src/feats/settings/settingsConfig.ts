@@ -6,9 +6,11 @@ import {
   setFontSize,
   setTextAlignment,
   AllyMethodParameters,
+  disableImages,
 } from "./methods/allyMethods";
 
 export type SettingsKey =
+  | "disableImages"
   | "setWordSpacing"
   | "setFontSize"
   | "setLineHeight"
@@ -24,6 +26,12 @@ export interface AllySetting {
 }
 
 export const settingsConfig: AllySetting[] = [
+  {
+    settingsKey: "disableImages",
+    allyMethod: disableImages,
+    title: "Disable Images",
+    steps: 1,
+  },
   {
     settingsKey: "setTextAlignment",
     allyMethod: setTextAlignment,
