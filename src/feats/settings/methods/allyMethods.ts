@@ -312,12 +312,12 @@ export const setTextAlignment = ({
 //endregion
 
 //region cognitive load
-export const disableImages = ({
+export const setImageVisibility = ({
   ref,
   step,
   getSettingsState,
 }: AllyMethodParameters) => {
-  const settingsState = getSettingsState({ settingsKey: "disableImages" });
+  const settingsState = getSettingsState({ settingsKey: "setImageVisibility" });
   const getVisibility = () => {
     return Boolean(step ?? settingsState?.activeStep) ? "collapse" : "visible";
   };
