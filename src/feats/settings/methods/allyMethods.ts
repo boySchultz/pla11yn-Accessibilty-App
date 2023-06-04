@@ -1,6 +1,7 @@
 import { WebView } from "react-native-webview";
 import React from "react";
 import { SettingsState } from "../../../store/StoreTypes";
+import theme from "../../../../theme";
 
 export interface AllyMethodParameters {
   ref: React.MutableRefObject<WebView | null>;
@@ -334,23 +335,44 @@ export const setLinkHighlight = ({
 }: AllyMethodParameters) => {
   const settingsState = getSettingsState({ settingsKey: "setLinkHighlight" });
 
-  if (step ?? settingsState?.activeStep) {
+  if (settingsState?.initialValue === undefined) {
     ref.current?.injectJavaScript(`
-		const links = document.querySelectorAll('a');
-		links.forEach((link) => {
-				link.style.backgroundColor = 'yellow';
-				link.style.color = 'black';
-			}
-		);
-		`);
+      var firstLink = document.querySelector('a');
+			var linkBackgroundColor = window.getComputedStyle(firstLink).backgroundColor;
+			var linkColor = window.getComputedStyle(firstLink).color;
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setLinkHighlight', initialValue: { backgroundColor: linkBackgroundColor, color: linkColor }}));
+			`);
+    if (step !== 0) {
+      ref.current?.injectJavaScript(`
+        const links = document.querySelectorAll('a');
+        links.forEach((link) => {
+            link.style.backgroundColor = '${theme.colors.secondary}';
+            link.style.color = '${theme.colors.primary}';
+          }
+        );
+		  `);
+    }
   } else {
+    const linkStyle = (steps: number) => {
+      const initialValue = JSON.parse(
+        JSON.stringify(settingsState.initialValue)
+      );
+      switch (steps) {
+        case 0:
+          return `link.style.backgroundColor = '${initialValue.backgroundColor}'; link.style.color = '${initialValue.color}'`;
+        case 1:
+          return `link.style.backgroundColor = '${theme.colors.secondary}'; link.style.color = '${theme.colors.primary}'`;
+        case 2:
+          return `link.style.backgroundColor = '${theme.colors.primary}'; link.style.color = '${theme.colors.secondary}'`;
+        default:
+          return `link.style.backgroundColor = '${initialValue.backgroundColor}'; link.style.color = '${initialValue.color}'`;
+      }
+    };
     ref.current?.injectJavaScript(`
-		const links = document.querySelectorAll('a');
-		links.forEach((link) => {
-				link.style.backgroundColor = '';
-				link.style.color = '';
-			}
-		);
+		    links.forEach((link) => {
+		       ${linkStyle(step ?? settingsState.activeStep)}
+		      }
+		    );
 		`);
   }
 };

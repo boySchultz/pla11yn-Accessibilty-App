@@ -31,8 +31,8 @@ export const settingsConfig: AllySetting[] = [
   {
     settingsKey: "setLinkHighlight",
     allyMethod: setLinkHighlight,
-    title: "Links Highlit",
-    steps: 1,
+    title: "Links Highlight",
+    steps: 2,
   },
   {
     settingsKey: "setImageVisibility",
