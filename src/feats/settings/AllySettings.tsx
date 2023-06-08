@@ -1,19 +1,46 @@
-import { View, StyleSheet, FlatList } from "react-native";
-import React, { MutableRefObject } from "react";
+import { View, StyleSheet, FlatList, Text } from "react-native";
+import React, { MutableRefObject, useState } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
 import { settingsConfig } from "./settingsConfig";
 import theme from "../../../theme";
+import { IconButton } from "react-native-paper";
 
 interface AllySettingsProps {
   webViewRef: MutableRefObject<WebView | null>;
   settingsEnabled: boolean;
 }
 
+interface CollapsibleWrapperProps {
+  title: string;
+  children: React.ReactNode;
+}
+
 export const AllySettings = ({
   webViewRef,
   settingsEnabled,
 }: AllySettingsProps) => {
+
+  const CollapsibleWrapper = ({ children, title }:CollapsibleWrapperProps) => {
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
+    const toggleCollapse = () => {
+      setIsCollapsed((prevCollapsed) => !prevCollapsed);
+    };
+
+    return (
+      <View>
+        <IconButton
+          icon={isCollapsed ? 'chevron-down' : 'chevron-up'}
+          size={40}
+          onPress={toggleCollapse}
+        />
+        <Text style={theme.ally.text}>{title}</Text>
+        {!isCollapsed && children}
+      </View>
+    );
+  };
+
   const renderSettings = ({ item }: any) => {
     return (
       <View style={styles.itemContainer}>
@@ -31,12 +58,14 @@ export const AllySettings = ({
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={settingsConfig}
-        numColumns={2}
-        renderItem={renderSettings}
-        columnWrapperStyle={styles.row} // Apply styles to each row
-      />
+      <CollapsibleWrapper title={'Visual Representation'}>
+        <FlatList
+          data={settingsConfig}
+          numColumns={2}
+          renderItem={renderSettings}
+          columnWrapperStyle={styles.row} // Apply styles to each row
+        />
+      </CollapsibleWrapper>
     </View>
   );
 };

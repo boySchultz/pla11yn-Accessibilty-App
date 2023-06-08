@@ -1,26 +1,14 @@
 import React, { useState, useRef, useMemo, useEffect } from "react";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
-import {
-  Animated,
-  StyleSheet,
-  View,
-  StatusBar,
-  Switch,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native";
-import { Appbar, Button, IconButton, Text } from "react-native-paper";
+import { Animated, StyleSheet, View, StatusBar, Switch, Platform, KeyboardAvoidingView, } from "react-native";
+import { Appbar, IconButton, Text } from "react-native-paper";
 import { SearchBar } from "./SearchBar";
 import { AllySettings } from "../settings/AllySettings";
 import theme from "../../../theme";
 import { SettingsState } from "../../store/StoreTypes";
 import { useAllyStore } from "../../store/allyStore";
 import { isSameWebsite } from "./utils/urlHelpers";
-import {
-  applyAllSettingsToWebView,
-  disableSettings,
-  resetAllInitialSettingsValues,
-} from "./utils/allyHelpers";
+import { applyAllSettingsToWebView, disableSettings, resetAllInitialSettingsValues, } from "./utils/allyHelpers";
 import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIconActive";
 import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
@@ -38,6 +26,7 @@ const Browser = () => {
 
   const [settingsEnabled, setSettingsEnabled] = useState<boolean>(true);
 
+  //browser navigation/ URL resolution
   useEffect(() => {
     if (isSameWebsite(prevUrl.current, url)) {
       applyAllSettingsToWebView(webViewRef, getAllSettings, getSettingByKey);
@@ -144,12 +133,21 @@ const Browser = () => {
               },
             ]}
           >
+            <View style={{backgroundColor:  theme.colors.background, borderTopColor: theme.colors.secondary, borderTopWidth: 5}}>
+              <IconButton
+                style={{backgroundColor: theme.colors.background}}
+                icon="close"
+                size={40}
+                onPress={closeDrawer}
+              />
+            </View>
             <AllySettings
               webViewRef={webViewRef}
               settingsEnabled={settingsEnabled}
             />
             <View
               style={{
+                backgroundColor: theme.colors.secondary,
                 flexDirection: "column",
                 justifyContent: "space-evenly",
                 padding: 18,
@@ -200,18 +198,6 @@ const Browser = () => {
                   }
                 />
               </View>
-              <Button
-                style={{ borderWidth: 2 }}
-                mode={"outlined"}
-                onPress={closeDrawer}
-              >
-                <Text
-                  style={{ ...theme.ally.text, color: theme.colors.background }}
-                  variant={"labelLarge"}
-                >
-                  Close Settings
-                </Text>
-              </Button>
             </View>
           </Animated.View>
         )}
