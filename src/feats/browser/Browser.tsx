@@ -13,208 +13,213 @@ import { AccessibilityMenuIconActive } from "../../assets/AccessibilityMenuIconA
 import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
-  const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
-  const [url, setUrl] = useState("https://www.sv-kampen.de/");
-  const prevUrl = useRef(url);
-  const [showSettings, setShowSettings] = useState<boolean>(false);
-  const webViewRef = useRef<WebView | null>(null);
+	const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
+	const [url, setUrl] = useState("https://www.sv-kampen.de/");
+	const prevUrl = useRef(url);
+	const [showSettings, setShowSettings] = useState<boolean>(false);
+	const webViewRef = useRef<WebView | null>(null);
 
-  const currentlyActiveSettings = useMemo(
-    () => getAllSettings().filter((s) => s.activeStep !== 0),
-    [getAllSettings()]
-  );
+	const currentlyActiveSettings = useMemo(
+		() => getAllSettings().filter((s) => s.activeStep !== 0),
+		[getAllSettings()]
+	);
 
-  const [settingsEnabled, setSettingsEnabled] = useState<boolean>(true);
+	const [settingsEnabled, setSettingsEnabled] = useState<boolean>(true);
 
-  //browser navigation/ URL resolution
-  useEffect(() => {
-    if (isSameWebsite(prevUrl.current, url)) {
-      applyAllSettingsToWebView(webViewRef, getAllSettings, getSettingByKey);
-    } else {
-      setSettingsEnabled(false);
-      resetAllInitialSettingsValues(webViewRef, getAllSettings, writeSetting);
-    }
-    prevUrl.current = url;
-  }, [url]);
+	//browser navigation/ URL resolution
+	useEffect(() => {
+		if (isSameWebsite(prevUrl.current, url)) {
+			applyAllSettingsToWebView(webViewRef, getAllSettings, getSettingByKey);
+		} else {
+			setSettingsEnabled(false);
+			resetAllInitialSettingsValues(webViewRef, getAllSettings, writeSetting);
+		}
+		prevUrl.current = url;
+	}, [url]);
 
-  //region drawer animation
-  const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
-  const openDrawer = () => {
-    Animated.timing(bottomDrawerAnim, {
-      toValue: 1,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    setShowSettings(true);
-  };
+	//region drawer animation
+	const bottomDrawerAnim = useRef(new Animated.Value(0)).current;
+	const openDrawer = () => {
+		Animated.timing(bottomDrawerAnim, {
+			toValue: 1,
+			duration: 500,
+			useNativeDriver: false,
+		}).start();
+		setShowSettings(true);
+	};
 
-  const closeDrawer = () => {
-    Animated.timing(bottomDrawerAnim, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start(() => setShowSettings(false));
-  };
-  //endregion
-  const handleMessage = (event: WebViewMessageEvent) => {
-    const eventState = JSON.parse(
-      event.nativeEvent.data
-    ) as Partial<SettingsState>;
+	const closeDrawer = () => {
+		Animated.timing(bottomDrawerAnim, {
+			toValue: 0,
+			duration: 500,
+			useNativeDriver: false,
+		}).start(() => setShowSettings(false));
+	};
+	//endregion
+	const handleMessage = (event: WebViewMessageEvent) => {
+		const eventState = JSON.parse(
+			event.nativeEvent.data
+		) as Partial<SettingsState>;
 
-    console.log("WebViewMessage Event:", eventState);
+		console.log("WebViewMessage Event:", eventState);
 
-    writeSetting({
-      initialValue: eventState.initialValue,
-      settingsKey: eventState.settingsKey,
-    });
-  };
+		writeSetting({
+			initialValue: eventState.initialValue,
+			settingsKey: eventState.settingsKey,
+		});
+	};
 
-  return (
-    <>
-      <StatusBar barStyle="light-content" />
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
-        <Appbar.Header
-          style={{ padding: 8, backgroundColor: theme.colors.secondary }}
-        >
-          <IconButton
-            selected={showSettings}
-            role={"button"}
-            accessibilityLabel={"opens and closes accessibility menu"}
-            iconColor={theme.colors.secondary}
-            style={{
-              height: 52,
-              width: 52,
-              backgroundColor: settingsEnabled
-                ? theme.colors.primary
-                : theme.colors.background,
-              marginRight: 16,
-              marginLeft: 8,
-            }}
-            /*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
-            icon={() =>
-              currentlyActiveSettings.length ? (
-                <AccessibilityMenuIconActive menuOpen={showSettings} />
-              ) : (
-                <AccessibilityMenuIcon menuOpen={showSettings} />
-              )
-            }
-            onPress={showSettings ? closeDrawer : openDrawer}
-          />
-          <SearchBar setUrl={setUrl} url={url} />
-        </Appbar.Header>
+	return (
+		<>
+			<StatusBar barStyle="light-content"/>
+			<KeyboardAvoidingView
+				style={{ flex: 1 }}
+				behavior={Platform.OS === "ios" ? "padding" : undefined}
+			>
+				<Appbar.Header
+					style={{ padding: 8, backgroundColor: theme.colors.secondary }}
+				>
+					<IconButton
+						selected={showSettings}
+						role={"button"}
+						accessibilityLabel={"opens and closes accessibility menu"}
+						iconColor={theme.colors.secondary}
+						style={{
+							height: 52,
+							width: 52,
+							backgroundColor: settingsEnabled
+								? theme.colors.primary
+								: theme.colors.background,
+							marginRight: 16,
+							marginLeft: 8,
+						}}
+						/*Color Meaning (WCAG SC 1.4.1, Level A): Color should not be used as the only means to convey information or distinguish visual elements.*/
+						icon={() =>
+							currentlyActiveSettings.length ? (
+								<AccessibilityMenuIconActive menuOpen={showSettings}/>
+							) : (
+								<AccessibilityMenuIcon menuOpen={showSettings}/>
+							)
+						}
+						onPress={showSettings ? closeDrawer : openDrawer}
+					/>
+					<SearchBar setUrl={setUrl} url={url}/>
+				</Appbar.Header>
 
-        {/*WebView*/}
-        <WebView
-          ref={webViewRef}
-          source={{ uri: url }}
-          onMessage={(event) => handleMessage(event)}
-          onLoadEnd={(navState) => {
-            setUrl(navState.nativeEvent.url);
-          }}
-        />
+				{/*WebView*/}
+				<WebView
+					ref={webViewRef}
+					source={{ uri: url }}
+					onMessage={(event) => handleMessage(event)}
+					onLoadEnd={(navState) => {
+						setUrl(navState.nativeEvent.url);
+					}}
+				/>
 
-        {/*Settings*/}
-        {showSettings && (
-          <Animated.View
-            style={[
-              styles.drawer,
-              {
-                transform: [
-                  {
-                    translateY: bottomDrawerAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [500, 0],
-                    }),
-                  },
-                ],
-              },
-            ]}
-          >
-            <View style={{backgroundColor:  theme.colors.background, borderTopColor: theme.colors.secondary, borderTopWidth: 5}}>
-              <IconButton
-                style={{backgroundColor: theme.colors.background}}
-                icon="close"
-                size={40}
-                onPress={closeDrawer}
-              />
-            </View>
-            <AllySettings
-              webViewRef={webViewRef}
-              settingsEnabled={settingsEnabled}
-            />
-            <View
-              style={{
-                backgroundColor: theme.colors.secondary,
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                padding: 18,
-              }}
-            >
-              <View
-                style={{
-                  marginBottom: 8,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{
-                    ...theme.ally.text,
-                    color: settingsEnabled
-                      ? theme.colors.primary
-                      : theme.colors.background,
-                  }}
-                  variant={"labelLarge"}
-                >
-                  Ally Settings Enabled
-                </Text>
-                <Switch
-                  value={settingsEnabled}
-                  onValueChange={() => {
-                    !settingsEnabled
-                      ? applyAllSettingsToWebView(
-                          webViewRef,
-                          getAllSettings,
-                          getSettingByKey
-                        )
-                      : disableSettings(
-                          webViewRef,
-                          getAllSettings,
-                          getSettingByKey,
-                          0
-                        );
+				{/*Settings*/}
+				{showSettings && (
+					<Animated.View
+						style={[
+							styles.drawer,
+							{
+								transform: [
+									{
+										translateY: bottomDrawerAnim.interpolate({
+											inputRange: [0, 1],
+											outputRange: [500, 0],
+										}),
+									},
+								],
+							},
+						]}
+					>
+						<View >
+						</View>
+						<AllySettings
+							webViewRef={webViewRef}
+							settingsEnabled={settingsEnabled}
+						/>
+						<View
+							style={{
+								backgroundColor: theme.colors.secondary,
+								flexDirection: "column",
+								justifyContent: "space-evenly",
+								padding: 18,
+							}}
+						>
+							<View
+								style={{
+									marginBottom: 8,
+									flexDirection: "row",
+									justifyContent: "space-between",
+									alignItems: "center",
+								}}
+							>
+								<IconButton
+									iconColor={settingsEnabled
+										? theme.colors.primary
+										: theme.colors.background}
+									icon={'close'}
+									size={30}
+									// style={{ backgroundColor: theme.colors.primary }}
+									onPress={closeDrawer}
+									mode={'outlined'}
+								/>
+								<Text
+									style={{
+										...theme.ally.text,
+										color: settingsEnabled
+											? theme.colors.primary
+											: theme.colors.background,
+									}}
+									variant={"labelLarge"}
+								>
+									Ally Settings Enabled
+								</Text>
+								<Switch
+									value={settingsEnabled}
+									onValueChange={() => {
+										!settingsEnabled
+											? applyAllSettingsToWebView(
+												webViewRef,
+												getAllSettings,
+												getSettingByKey
+											)
+											: disableSettings(
+												webViewRef,
+												getAllSettings,
+												getSettingByKey,
+												0
+											);
 
-                    setSettingsEnabled(!settingsEnabled);
-                  }}
-                  trackColor={{ true: theme.colors.switchTrackTrue }}
-                  thumbColor={
-                    settingsEnabled
-                      ? theme.colors.primary
-                      : theme.colors.background
-                  }
-                />
-              </View>
-            </View>
-          </Animated.View>
-        )}
-      </KeyboardAvoidingView>
-    </>
-  );
+										setSettingsEnabled(!settingsEnabled);
+									}}
+									trackColor={{ true: theme.colors.switchTrackTrue }}
+									thumbColor={
+										settingsEnabled
+											? theme.colors.primary
+											: theme.colors.background
+									}
+								/>
+							</View>
+						</View>
+					</Animated.View>
+				)}
+			</KeyboardAvoidingView>
+		</>
+	);
 };
 
 const styles = StyleSheet.create({
-  drawer: {
-    color: theme.colors.primary,
-    backgroundColor: theme.colors.secondary,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 500,
-  },
+	drawer: {
+		borderTopWidth: 5,
+		color: theme.colors.primary,
+		backgroundColor: theme.colors.secondary,
+		position: "absolute",
+		bottom: 0,
+		left: 0,
+		right: 0,
+		height: 600,
+	},
 });
 export default Browser;
