@@ -2,7 +2,7 @@ import { View, StyleSheet, FlatList, Text } from "react-native";
 import React, { MutableRefObject, useState } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
-import { settingsConfig } from "./settingsConfig";
+import { visualPresentation, cognitiveLoadConfig } from "./settingsConfig";
 import theme from "../../../theme";
 import { IconButton } from "react-native-paper";
 
@@ -64,12 +64,20 @@ export const AllySettings = ({
 
   return (
     <View style={styles.container}>
-      <CollapsibleWrapper title={"Visual Representation"}>
+      <CollapsibleWrapper title={"Cognitive Load"}>
         <FlatList
-          data={settingsConfig}
+          data={cognitiveLoadConfig}
           numColumns={2}
           renderItem={renderSettings}
-          columnWrapperStyle={styles.row} // Apply styles to each row
+          columnWrapperStyle={styles.row}
+        />
+      </CollapsibleWrapper>
+      <CollapsibleWrapper title={"Visual Representation"}>
+        <FlatList
+          data={visualPresentation}
+          numColumns={2}
+          renderItem={renderSettings}
+          columnWrapperStyle={styles.row}
         />
       </CollapsibleWrapper>
     </View>

@@ -27,19 +27,24 @@ export interface AllySetting {
   steps: number;
 }
 
-export const settingsConfig: AllySetting[] = [
-  {
-    settingsKey: "setLinkHighlight",
+export const cognitiveLoadConfig: AllySetting[] = [
+
+{
+  settingsKey: "setLinkHighlight",
     allyMethod: setLinkHighlight,
-    title: "Links Highlight",
-    steps: 2,
-  },
-  {
-    settingsKey: "setImageVisibility",
+  title: "Links Highlight",
+  steps: 2,
+},
+{
+  settingsKey: "setImageVisibility",
     allyMethod: setImageVisibility,
-    title: "Images Disabled",
-    steps: 1,
-  },
+  title: "Images Disabled",
+  steps: 1,
+},
+];
+
+
+export const visualPresentation: AllySetting[] = [
   {
     settingsKey: "setTextAlignment",
     allyMethod: setTextAlignment,
