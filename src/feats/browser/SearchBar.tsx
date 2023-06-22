@@ -18,12 +18,13 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   return (
     <TextInput
+      multiline={false}
       placeholder="Search or enter URL"
       textContentType={"URL"}
       style={styles.input}
       value={inputText}
       onChangeText={(change) => setInputText(change)}
-      numberOfLines={1}
+      // numberOfLines={1}
       role="searchbox"
       aria-label="Search or enter URL"
       right={

@@ -89,7 +89,7 @@ const Browser = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <Appbar.Header
-          style={{ padding: 8, backgroundColor: theme.colors.secondary }}
+          style={{ padding: 8, backgroundColor: theme.colors.secondary, marginBottom: 4 }}
         >
           <IconButton
             selected={showSettings}
@@ -156,6 +156,7 @@ const Browser = () => {
                 flexDirection: "row",
                 justifyContent: "space-evenly",
                 alignItems: "center",
+                backgroundColor: theme.colors.secondary
               }}
             >
               <IconButton
