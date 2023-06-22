@@ -2,7 +2,7 @@ import { View, StyleSheet, FlatList, Text } from "react-native";
 import React, { MutableRefObject, useState } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
-import { visualPresentation, cognitiveLoadConfig } from "./settingsConfig";
+import { visualPresentationConfig, cognitiveLoadConfig, } from "./settingsConfig";
 import theme from "../../../theme";
 import { IconButton } from "react-native-paper";
 
@@ -26,9 +26,8 @@ export const AllySettings = ({
     const toggleCollapse = () => {
       setIsCollapsed((prevCollapsed) => !prevCollapsed);
     };
-
     return (
-      <>
+      <View>
         <View
           style={{
             flexDirection: "row",
@@ -43,7 +42,7 @@ export const AllySettings = ({
           <Text style={theme.ally.text}>{title}</Text>
         </View>
         {!isCollapsed && children}
-      </>
+      </View>
     );
   };
 
@@ -66,15 +65,17 @@ export const AllySettings = ({
     <View style={styles.container}>
       <CollapsibleWrapper title={"Cognitive Load"}>
         <FlatList
+          scrollToOverflowEnabled
           data={cognitiveLoadConfig}
           numColumns={2}
           renderItem={renderSettings}
           columnWrapperStyle={styles.row}
         />
       </CollapsibleWrapper>
+
       <CollapsibleWrapper title={"Visual Representation"}>
         <FlatList
-          data={visualPresentation}
+          data={visualPresentationConfig}
           numColumns={2}
           renderItem={renderSettings}
           columnWrapperStyle={styles.row}

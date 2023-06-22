@@ -1,4 +1,7 @@
-import { settingsConfig } from "../../settings/settingsConfig";
+import {
+  cognitiveLoadConfig,
+  visualPresentationConfig,
+} from "../../settings/settingsConfig";
 import { SettingsState } from "../../../store/StoreTypes";
 import React from "react";
 import { WebView } from "react-native-webview";
@@ -12,7 +15,7 @@ export const applyAllSettingsToWebView = (
 ) => {
   if (!webViewRef) return;
   getAllSettings().forEach((setting) =>
-    settingsConfig
+    [...cognitiveLoadConfig, ...visualPresentationConfig]
       .find((sc) => sc.settingsKey === setting.settingsKey)
       ?.allyMethod({ ref: webViewRef, getSettingsState: getSettingByKey })
   );
@@ -28,7 +31,7 @@ export const disableSettings = (
 ) => {
   if (!webViewRef) return;
   getAllSettings().forEach((setting) =>
-    settingsConfig
+    [...cognitiveLoadConfig, ...visualPresentationConfig]
       .find((sc) => sc.settingsKey === setting.settingsKey)
       ?.allyMethod({
         ref: webViewRef,

@@ -28,23 +28,21 @@ export interface AllySetting {
 }
 
 export const cognitiveLoadConfig: AllySetting[] = [
-
-{
-  settingsKey: "setLinkHighlight",
+  {
+    settingsKey: "setLinkHighlight",
     allyMethod: setLinkHighlight,
-  title: "Links Highlight",
-  steps: 2,
-},
-{
-  settingsKey: "setImageVisibility",
+    title: "Links Highlight",
+    steps: 2,
+  },
+  {
+    settingsKey: "setImageVisibility",
     allyMethod: setImageVisibility,
-  title: "Images Disabled",
-  steps: 1,
-},
+    title: "Images Disabled",
+    steps: 1,
+  },
 ];
 
-
-export const visualPresentation: AllySetting[] = [
+export const visualPresentationConfig: AllySetting[] = [
   {
     settingsKey: "setTextAlignment",
     allyMethod: setTextAlignment,
