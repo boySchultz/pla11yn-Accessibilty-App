@@ -18,13 +18,13 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   return (
     <TextInput
+      numberOfLines={1}
       multiline={false}
       placeholder="Search or enter URL"
       textContentType={"URL"}
       style={styles.input}
       value={inputText}
       onChangeText={(change) => setInputText(change)}
-      // numberOfLines={1}
       role="searchbox"
       aria-label="Search or enter URL"
       right={
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 16,
     flex: 1,
-    overflow: "hidden",
     backgroundColor: theme.colors.background,
     height: 48,
     marginHorizontal: 8,
