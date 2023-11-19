@@ -313,6 +313,7 @@ export const setTextAlignment = ({
 //endregion
 
 //region cognitive load
+// enable or disable images
 export const setImageVisibility = ({
   ref,
   step,
@@ -328,6 +329,11 @@ export const setImageVisibility = ({
 		`);
 };
 
+// this is a combination of helping to identify interaction elements by highlighting them and the following ACs:
+// Success Criterion 1.4.3 Contrast (enhanced) as the elements will conform to contrast specs after applying these styles
+//Success Criterion 1.4.8 Visual Presentation: colours can not be directly selected but a selection of 2 different styles of high contrast
+// colours are available.
+// Providing something like a colour picker could be problematic itself so I went for 2 set colours instead.
 export const setButtonHighlight = ({
   ref,
   step,
@@ -377,6 +383,12 @@ export const setButtonHighlight = ({
   }
 };
 
+
+// this is a combination of helping to identify interaction elements by highlighting them and the following ACs:
+// Success Criterion 1.4.3 Contrast (enhanced) as the elements will conform to contrast specs after applying these styles
+//Success Criterion 1.4.8 Visual Presentation: colours can not be directly selected but a selection of 2 different styles of high contrast
+// colours are available.
+// Providing something like a colour picker could be problematic itself so I went for 2 set colours instead.
 export const setLinkHighlight = ({
   ref,
   step,
