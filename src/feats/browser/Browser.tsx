@@ -26,7 +26,7 @@ import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
   const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
-  const [url, setUrl] = useState("https://www.sv-kampen.de/");
+  const [url, setUrl] = useState("https://www.regionalpark-rosengarten.de/");
   const prevUrl = useRef(url);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const webViewRef = useRef<WebView | null>(null);
@@ -94,7 +94,7 @@ const Browser = () => {
           <IconButton
             selected={showSettings}
             role={"button"}
-            accessibilityLabel={"opens and closes accessibility menu"}
+            accessibilityLabel={"öffnet und schließt Accessibilty Menü"}
             iconColor={theme.colors.secondary}
             style={{
               height: 52,
