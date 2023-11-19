@@ -18,8 +18,6 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   return (
     <TextInput
-      numberOfLines={1}
-      multiline={false}
       placeholder="Search or enter URL"
       textContentType={"URL"}
       style={styles.input}
@@ -43,11 +41,13 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
 const styles = StyleSheet.create({
   input: {
-    fontSize: 16,
+    marginBottom: 8,
+    fontSize: 18,
     flex: 1,
+    alignContent:"center",
+    justifyContent:'center',
     backgroundColor: theme.colors.background,
-    height: 48,
-    marginHorizontal: 8,
+    height: 70,
     marginRight: 16,
     paddingHorizontal: 16,
   },
