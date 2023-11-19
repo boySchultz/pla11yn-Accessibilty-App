@@ -12,7 +12,7 @@ export interface AllyMethodParameters {
 }
 
 //region TEXT PRESENTATION
-// SC 1.4.12:Text Spacing (Level AA)
+// AC 1.4.12:Text Spacing (Level AA)
 // Line height (line spacing) to at least 1.5 times the font size; V
 // Spacing following paragraphs to at least 2 times the font size; V
 // Letter spacing (tracking) to at least 0.12 times the font size; V
