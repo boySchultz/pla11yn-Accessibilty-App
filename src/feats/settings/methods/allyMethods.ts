@@ -328,6 +328,55 @@ export const setImageVisibility = ({
 		`);
 };
 
+export const setButtonHighlight = ({
+  ref,
+  step,
+  getSettingsState,
+}: AllyMethodParameters) => {
+  const settingsState = getSettingsState({ settingsKey: "setButtonHighlight" });
+
+  if (settingsState?.initialValue === undefined) {
+    ref.current?.injectJavaScript(`
+      var firstButton = document.querySelector('button');
+			var buttonBackgroundColor = window.getComputedStyle(firstButton).backgroundColor;
+			var buttonColor = window.getComputedStyle(firstButton).color;
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setButtonHighlight', initialValue: { backgroundColor: buttonBackgroundColor, color: buttonColor }}));
+			`);
+    if (step !== 0) {
+      ref.current?.injectJavaScript(`
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.style.backgroundColor = '${theme.colors.secondary}';
+            button.style.color = '${theme.colors.primary}';
+          }
+        );
+		  `);
+    }
+  } else {
+    const buttonStyle = (steps: number) => {
+      const initialValue = JSON.parse(
+        JSON.stringify(settingsState.initialValue)
+      );
+      switch (steps) {
+        case 0:
+          return `button.style.backgroundColor = '${initialValue.backgroundColor}'; button.style.color = '${initialValue.color}'`;
+        case 1:
+          return `button.style.backgroundColor = '${theme.colors.secondary}'; button.style.color = '${theme.colors.primary}'`;
+        case 2:
+          return `button.style.backgroundColor = '${theme.colors.primary}'; button.style.color = '${theme.colors.secondary}'`;
+        default:
+          return `button.style.backgroundColor = '${initialValue.backgroundColor}'; button.style.color = '${initialValue.color}'`;
+      }
+    };
+    ref.current?.injectJavaScript(`
+		    buttons.forEach((button) => {
+		       ${buttonStyle(step ?? settingsState.activeStep)}
+		      }
+		    );
+		`);
+  }
+};
+
 export const setLinkHighlight = ({
   ref,
   step,

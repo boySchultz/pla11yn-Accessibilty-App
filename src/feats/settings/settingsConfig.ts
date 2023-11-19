@@ -7,18 +7,20 @@ import {
   setTextAlignment,
   AllyMethodParameters,
   setImageVisibility,
-  setLinkHighlight,
+  setLinkHighlight, setButtonHighlight,
 } from "./methods/allyMethods";
 
 export type SettingsKey =
   | "setLinkHighlight"
+  | "setButtonHighlight"
   | "setImageVisibility"
   | "setWordSpacing"
   | "setFontSize"
   | "setLineHeight"
   | "setLetterSpacing"
   | "setParagraphHeight"
-  | "setTextAlignment";
+  | "setTextAlignment"
+  | "setImageContrast";
 
 export interface AllySetting {
   settingsKey: SettingsKey;
@@ -31,13 +33,19 @@ export const cognitiveLoadConfig: AllySetting[] = [
   {
     settingsKey: "setLinkHighlight",
     allyMethod: setLinkHighlight,
-    title: "Links Highlight",
+    title: "Links Hervorheben",
+    steps: 2,
+  },
+  {
+    settingsKey: "setButtonHighlight",
+    allyMethod: setButtonHighlight,
+    title: "Klickbare Felder Hervorheben",
     steps: 2,
   },
   {
     settingsKey: "setImageVisibility",
     allyMethod: setImageVisibility,
-    title: "Images Disabled",
+    title: "Bilder Vergergen",
     steps: 1,
   },
 ];
