@@ -181,7 +181,7 @@ const Browser = () => {
                 }}
                 variant={"labelLarge"}
               >
-                Ally Settings Enabled
+                Einstellungen aktiviert
               </Text>
               <Switch
                 value={settingsEnabled}

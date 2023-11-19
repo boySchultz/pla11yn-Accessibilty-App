@@ -18,7 +18,7 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   return (
     <TextInput
-      placeholder="Search or enter URL"
+      placeholder="Suche"
       textContentType={"URL"}
       style={{ ...styles.input, ...theme.ally.text }}
       value={inputText}
@@ -29,7 +29,7 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
         <TextInput.Icon
           iconColor={theme.colors.secondary}
           size={40}
-          aria-label="Search"
+          aria-label="Suche"
           role="button"
           icon="magnify"
           onPress={() => handleSearch(inputText, setUrl)}
