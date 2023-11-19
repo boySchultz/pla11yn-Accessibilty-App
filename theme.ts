@@ -11,6 +11,7 @@ const theme = {
 		switchTrackFalse: '#223046B3',
 		switchTrackTrue:'#EFC41033'
 	},
+	// text settings according to wcag guideline 1.4
 	ally:{
 		text: {
 			fontWeight: "bold",

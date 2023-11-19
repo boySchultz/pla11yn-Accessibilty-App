@@ -73,8 +73,6 @@ const Browser = () => {
       event.nativeEvent.data
     ) as Partial<SettingsState>;
 
-    console.log("WebViewMessage Event:", eventState);
-
     writeSetting({
       initialValue: eventState.initialValue,
       settingsKey: eventState.settingsKey,

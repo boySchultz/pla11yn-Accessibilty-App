@@ -20,11 +20,11 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
     <TextInput
       placeholder="Search or enter URL"
       textContentType={"URL"}
-      style={styles.input}
+      style={{...styles.input, ...theme.ally.text}}
       value={inputText}
       onChangeText={(change) => setInputText(change)}
       role="searchbox"
-      aria-label="Search or enter URL"
+      aria-label="Suche nach Stichworten oder gib eine URL ein."
       right={
         <TextInput.Icon
           iconColor={theme.colors.secondary}
