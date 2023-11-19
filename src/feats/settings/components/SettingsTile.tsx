@@ -51,7 +51,7 @@ export const SettingsTile = ({
   return (
     <TouchableOpacity
       role={"button"}
-      aria-label={'Accessibilty Option eine Stufe erhöhen'}
+      aria-label={"Accessibilty Option eine Stufe erhöhen"}
       style={{ ...styles.container, borderWidth: activeStep === 0 ? 2 : 4 }}
       onPress={() => handleNext()}
     >

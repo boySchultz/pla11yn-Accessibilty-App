@@ -70,7 +70,7 @@ export const AllySettings = ({
 
   return (
     <ScrollView nestedScrollEnabled={true} style={styles.container}>
-      <CollapsibleWrapper title={"Cognitive Load"}>
+      <CollapsibleWrapper title={"Navigationshilfen"}>
         <FlatList
           scrollEnabled={false}
           data={cognitiveLoadConfig}
@@ -80,7 +80,7 @@ export const AllySettings = ({
         />
       </CollapsibleWrapper>
 
-      <CollapsibleWrapper title={"Visual Representation"}>
+      <CollapsibleWrapper title={"Visuelle Darstellung"}>
         <FlatList
           scrollEnabled={false}
           data={visualPresentationConfig}

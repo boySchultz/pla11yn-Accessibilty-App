@@ -20,7 +20,7 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
     <TextInput
       placeholder="Search or enter URL"
       textContentType={"URL"}
-      style={{...styles.input, ...theme.ally.text}}
+      style={{ ...styles.input, ...theme.ally.text }}
       value={inputText}
       onChangeText={(change) => setInputText(change)}
       role="searchbox"
