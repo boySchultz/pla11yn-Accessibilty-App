@@ -26,7 +26,7 @@ import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
   const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
-  const [url, setUrl] = useState("https://www.regionalpark-rosengarten.de/");
+  const [url, setUrl] = useState("https://www.google.de/");
   const prevUrl = useRef(url);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const webViewRef = useRef<WebView | null>(null);
