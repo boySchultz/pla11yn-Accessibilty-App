@@ -107,7 +107,8 @@ const styles = StyleSheet.create({
   tileContainer: {
     flex: 1,
     margin: 8,
-    minWidth: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
-    minHeight: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
+    // Set minimum width and height to 44 for Target Size (enhanced) Level AAA
+    minWidth: 44,
+    minHeight: 44,
   },
 });

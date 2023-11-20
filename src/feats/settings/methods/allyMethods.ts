@@ -349,15 +349,6 @@ export const setImageContrast = ({
       }
     };
 
-    // 	if (step ?? settingsState.activeStep === 0) {
-    // 		ref.current?.injectJavaScript(`
-    //   var images = document.querySelectorAll('img');
-    //   images.forEach((img) => {
-    //     let newFilter = '${contrastValue(step ?? settingsState.activeStep)}';
-    //     img.style.filter = newFilter + 'none';
-    //   });
-    // `);
-    // 	}
     ref.current?.injectJavaScript(`
     var images = document.querySelectorAll('img');
     images.forEach((img) => {
