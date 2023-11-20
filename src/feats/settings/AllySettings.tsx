@@ -1,8 +1,11 @@
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, ScrollView } from "react-native";
 import React, { MutableRefObject, useState } from "react";
 import { WebView } from "react-native-webview";
 import { SettingsTile } from "./components/SettingsTile";
-import { visualPresentationConfig, cognitiveLoadConfig, } from "./settingsConfig";
+import {
+  visualPresentationConfig,
+  cognitiveLoadConfig,
+} from "./settingsConfig";
 import theme from "../../../theme";
 import { IconButton } from "react-native-paper";
 
@@ -38,8 +41,12 @@ export const AllySettings = ({
             icon={isCollapsed ? "chevron-down" : "chevron-up"}
             size={40}
             onPress={toggleCollapse}
+            role={"button"}
+            aria-label={"Öffne oder schließe eine Accessibility Kategorie"}
           />
-          <Text style={theme.ally.text}>{title}</Text>
+          <Text onPress={toggleCollapse} style={theme.ally.text}>
+            {title}
+          </Text>
         </View>
         {!isCollapsed && children}
       </View>
@@ -62,10 +69,10 @@ export const AllySettings = ({
   };
 
   return (
-    <View style={styles.container}>
-      <CollapsibleWrapper title={"Cognitive Load"}>
+    <ScrollView nestedScrollEnabled={true} style={styles.container}>
+      <CollapsibleWrapper title={"Navigationshilfen"}>
         <FlatList
-          scrollToOverflowEnabled
+          scrollEnabled={false}
           data={cognitiveLoadConfig}
           numColumns={2}
           renderItem={renderSettings}
@@ -73,15 +80,16 @@ export const AllySettings = ({
         />
       </CollapsibleWrapper>
 
-      <CollapsibleWrapper title={"Visual Representation"}>
+      <CollapsibleWrapper title={"Visuelle Darstellung"}>
         <FlatList
+          scrollEnabled={false}
           data={visualPresentationConfig}
           numColumns={2}
           renderItem={renderSettings}
           columnWrapperStyle={styles.row}
         />
       </CollapsibleWrapper>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -99,7 +107,8 @@ const styles = StyleSheet.create({
   tileContainer: {
     flex: 1,
     margin: 8,
-    minWidth: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
-    minHeight: 96, // Set minimum width of each item to 96 for Target Size (Level AAA)
+    // Set minimum width and height to 44 for Target Size (enhanced) Level AAA
+    minWidth: 44,
+    minHeight: 44,
   },
 });

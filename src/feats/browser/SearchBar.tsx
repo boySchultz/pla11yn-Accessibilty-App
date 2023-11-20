@@ -18,20 +18,18 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
   return (
     <TextInput
-      numberOfLines={1}
-      multiline={false}
-      placeholder="Search or enter URL"
+      placeholder="Suche"
       textContentType={"URL"}
-      style={styles.input}
+      style={{ ...styles.input, ...theme.ally.text }}
       value={inputText}
       onChangeText={(change) => setInputText(change)}
       role="searchbox"
-      aria-label="Search or enter URL"
+      aria-label="Suche nach Stichworten oder gib eine URL ein."
       right={
         <TextInput.Icon
           iconColor={theme.colors.secondary}
           size={40}
-          aria-label="Search"
+          aria-label="Suche"
           role="button"
           icon="magnify"
           onPress={() => handleSearch(inputText, setUrl)}
@@ -43,11 +41,13 @@ export const SearchBar = ({ setUrl, url }: SearchBarProps) => {
 
 const styles = StyleSheet.create({
   input: {
-    fontSize: 16,
+    marginBottom: 8,
+    fontSize: 18,
     flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
     backgroundColor: theme.colors.background,
-    height: 48,
-    marginHorizontal: 8,
+    height: 70,
     marginRight: 16,
     paddingHorizontal: 16,
   },

@@ -20,8 +20,8 @@ export interface AllyMethodParameters {
 
 // Success Criterion 1.4.8 Visual Presentation (Level AAA)
 // For the visual presentation of blocks of text, a mechanism is available to achieve the following:
-//TODO: (Foreground and background colors can be selected by the user.)
-//TODO (Width is no more than 80 characters or glyphs (40 if CJK).)
+// (Foreground and background colors can be selected by the user.)
+// X not implemented! (Width is no more than 80 characters or glyphs (40 if CJK).)
 //Text is not justified (aligned to both the left and the right margins) V .
 // Line spacing (leading) is at least space-and-a-half within paragraphs, and paragraph spacing is at least 1.5 times larger than the line spacing.
 // Text can be resized without assistive technology up to 200 percent in a way that does not require the user to scroll horizontally to read a line of text on a full-screen window V.
@@ -312,7 +312,57 @@ export const setTextAlignment = ({
 };
 //endregion
 
-//region cognitive load
+//region IMAGE(OF TEXT)CONTRAST
+export const setImageContrast = ({
+  ref,
+  step,
+  getSettingsState,
+}: AllyMethodParameters) => {
+  const settingsState = getSettingsState({ settingsKey: "setImageContrast" });
+
+  if (settingsState?.initialValue === undefined) {
+    ref.current?.injectJavaScript(`
+      window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setImageContrast', initialValue: 'none' }));
+    `);
+
+    if (step !== 0) {
+      ref.current?.injectJavaScript(`
+        let allImages = document.querySelectorAll('img');
+        allImages.forEach((img) => {
+          img.style.filter = 'contrast(150%)';
+        });
+		  `);
+    }
+  } else {
+    const contrastValue = (steps: number) => {
+      switch (steps) {
+        case 0:
+          return "none"; // Filter zurücksetzen, wenn step 0 ist
+        case 1:
+          return "contrast(150%)";
+        case 2:
+          return "contrast(300%)";
+        case 3:
+          return "invert(200%)";
+        default:
+          return "none";
+      }
+    };
+
+    ref.current?.injectJavaScript(`
+    var images = document.querySelectorAll('img');
+    images.forEach((img) => {
+      let newFilter = '${contrastValue(step ?? settingsState.activeStep)}';
+      img.style.filter = newFilter;
+    });
+  `);
+  }
+};
+
+//endregion
+
+//region COGNITIVE LOAD
+// enable or disable images
 export const setImageVisibility = ({
   ref,
   step,
@@ -328,6 +378,65 @@ export const setImageVisibility = ({
 		`);
 };
 
+// this is a combination of helping to identify interaction elements by highlighting them and the following ACs:
+// Success Criterion 1.4.3 Contrast (enhanced) as the elements will conform to contrast specs after applying these styles
+//Success Criterion 1.4.8 Visual Presentation: colours can not be directly selected but a selection of 2 different styles of high contrast
+// colours are available.
+// Providing something like a colour picker could be problematic itself so I went for 2 set colours instead.
+export const setButtonHighlight = ({
+  ref,
+  step,
+  getSettingsState,
+}: AllyMethodParameters) => {
+  const settingsState = getSettingsState({ settingsKey: "setButtonHighlight" });
+
+  if (settingsState?.initialValue === undefined) {
+    ref.current?.injectJavaScript(`
+      var firstButton = document.querySelector('button');
+			var buttonBackgroundColor = window.getComputedStyle(firstButton).backgroundColor;
+			var buttonColor = window.getComputedStyle(firstButton).color;
+			window.ReactNativeWebView.postMessage(JSON.stringify({ settingsKey: 'setButtonHighlight', initialValue: { backgroundColor: buttonBackgroundColor, color: buttonColor }}));
+			`);
+    if (step !== 0) {
+      ref.current?.injectJavaScript(`
+        const buttons = document.querySelectorAll('button');
+        buttons.forEach((button) => {
+            button.style.backgroundColor = '${theme.colors.secondary}';
+            button.style.color = '${theme.colors.primary}';
+          }
+        );
+		  `);
+    }
+  } else {
+    const buttonStyle = (steps: number) => {
+      const initialValue = JSON.parse(
+        JSON.stringify(settingsState.initialValue)
+      );
+      switch (steps) {
+        case 0:
+          return `button.style.backgroundColor = '${initialValue.backgroundColor}'; button.style.color = '${initialValue.color}'`;
+        case 1:
+          return `button.style.backgroundColor = '${theme.colors.secondary}'; button.style.color = '${theme.colors.primary}'`;
+        case 2:
+          return `button.style.backgroundColor = '${theme.colors.primary}'; button.style.color = '${theme.colors.secondary}'`;
+        default:
+          return `button.style.backgroundColor = '${initialValue.backgroundColor}'; button.style.color = '${initialValue.color}'`;
+      }
+    };
+    ref.current?.injectJavaScript(`
+		    buttons.forEach((button) => {
+		       ${buttonStyle(step ?? settingsState.activeStep)}
+		      }
+		    );
+		`);
+  }
+};
+
+// this is a combination of helping to identify interaction elements by highlighting them and the following ACs:
+// Success Criterion 1.4.3 Contrast (enhanced) as the elements will conform to contrast specs after applying these styles
+//Success Criterion 1.4.8 Visual Presentation: colours can not be directly selected but a selection of 2 different styles of high contrast
+// colours are available.
+// Providing something like a colour picker could be problematic itself so I went for 2 set colours instead.
 export const setLinkHighlight = ({
   ref,
   step,

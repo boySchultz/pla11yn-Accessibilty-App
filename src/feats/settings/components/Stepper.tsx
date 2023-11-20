@@ -20,6 +20,8 @@ export const Stepper = ({
   return (
     <View style={styles.container}>
       <IconButton
+        role={"button"}
+        aria-label={"Accessibilty Option eine Stufe verringern"}
         icon={({ size, color }) => (
           <MaterialCommunityIcons
             name="chevron-left"
@@ -33,6 +35,10 @@ export const Stepper = ({
       <View style={styles.dots}>
         {Array.from({ length: steps }, (_, index) => (
           <View
+            role={"contentinfo"}
+            aria-label={`Dieses Settings ist auf Stufe ${
+              index + 1
+            } von ${steps}`}
             key={index}
             style={[
               styles.circle,
@@ -42,6 +48,8 @@ export const Stepper = ({
         ))}
       </View>
       <IconButton
+        role={"button"}
+        aria-label={"Accessibilty Option eine Stufe erhöhen"}
         icon={({ size, color }) => (
           <MaterialCommunityIcons
             name="chevron-right"

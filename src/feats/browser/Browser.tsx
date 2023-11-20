@@ -26,7 +26,7 @@ import { AccessibilityMenuIcon } from "../../assets/AccessibilityMenuIcon";
 
 const Browser = () => {
   const { writeSetting, getAllSettings, getSettingByKey } = useAllyStore();
-  const [url, setUrl] = useState("https://www.sv-kampen.de/");
+  const [url, setUrl] = useState("https://www.google.de/");
   const prevUrl = useRef(url);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const webViewRef = useRef<WebView | null>(null);
@@ -73,8 +73,6 @@ const Browser = () => {
       event.nativeEvent.data
     ) as Partial<SettingsState>;
 
-    console.log("WebViewMessage Event:", eventState);
-
     writeSetting({
       initialValue: eventState.initialValue,
       settingsKey: eventState.settingsKey,
@@ -89,12 +87,16 @@ const Browser = () => {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <Appbar.Header
-          style={{ padding: 8, backgroundColor: theme.colors.secondary, marginBottom: 4 }}
+          style={{
+            padding: 8,
+            backgroundColor: theme.colors.secondary,
+            marginBottom: 4,
+          }}
         >
           <IconButton
             selected={showSettings}
             role={"button"}
-            accessibilityLabel={"opens and closes accessibility menu"}
+            accessibilityLabel={"öffnet und schließt Accessibilty Menü"}
             iconColor={theme.colors.secondary}
             style={{
               height: 52,
@@ -156,7 +158,7 @@ const Browser = () => {
                 flexDirection: "row",
                 justifyContent: "space-evenly",
                 alignItems: "center",
-                backgroundColor: theme.colors.secondary
+                backgroundColor: theme.colors.secondary,
               }}
             >
               <IconButton
@@ -179,7 +181,7 @@ const Browser = () => {
                 }}
                 variant={"labelLarge"}
               >
-                Ally Settings Enabled
+                Einstellungen aktiviert
               </Text>
               <Switch
                 value={settingsEnabled}

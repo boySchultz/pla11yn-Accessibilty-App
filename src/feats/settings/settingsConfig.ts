@@ -8,17 +8,21 @@ import {
   AllyMethodParameters,
   setImageVisibility,
   setLinkHighlight,
+  setButtonHighlight,
+  setImageContrast,
 } from "./methods/allyMethods";
 
 export type SettingsKey =
   | "setLinkHighlight"
+  | "setButtonHighlight"
   | "setImageVisibility"
   | "setWordSpacing"
   | "setFontSize"
   | "setLineHeight"
   | "setLetterSpacing"
   | "setParagraphHeight"
-  | "setTextAlignment";
+  | "setTextAlignment"
+  | "setImageContrast";
 
 export interface AllySetting {
   settingsKey: SettingsKey;
@@ -31,52 +35,64 @@ export const cognitiveLoadConfig: AllySetting[] = [
   {
     settingsKey: "setLinkHighlight",
     allyMethod: setLinkHighlight,
-    title: "Links Highlight",
+    title: "Links Hervorheben",
     steps: 2,
   },
   {
-    settingsKey: "setImageVisibility",
-    allyMethod: setImageVisibility,
-    title: "Images Disabled",
-    steps: 1,
+    settingsKey: "setButtonHighlight",
+    allyMethod: setButtonHighlight,
+    title: "Klickbare Felder Hervorheben",
+    steps: 2,
   },
 ];
 
 export const visualPresentationConfig: AllySetting[] = [
   {
+    settingsKey: "setImageContrast",
+    allyMethod: setImageContrast,
+    steps: 3,
+    title: "Kontrast von Bildern",
+  },
+  {
+    settingsKey: "setImageVisibility",
+    allyMethod: setImageVisibility,
+    title: "Bilder Verbergen",
+    steps: 1,
+  },
+  {
     settingsKey: "setTextAlignment",
     allyMethod: setTextAlignment,
-    title: "Text Alignment",
+    title: "Text Ausrichtung",
     steps: 3,
   },
   {
     settingsKey: "setFontSize",
     allyMethod: setFontSize,
-    title: "Font Size",
+    title: "Textgröße",
     steps: 3,
   },
   {
     settingsKey: "setLineHeight",
     allyMethod: setLineHeight,
-    title: "Line Height",
+    title: "Zeilen-Höhe",
     steps: 2,
   },
   {
     settingsKey: "setParagraphHeight",
     allyMethod: setParagraphHeight,
-    title: "Paragraph Height",
+    title: "Absatz-Höhe",
     steps: 2,
   },
   {
     settingsKey: "setLetterSpacing",
     allyMethod: setLetterSpacing,
-    title: "Letter Spacing",
+    title: "Buchstaben-Abstand",
     steps: 3,
   },
   {
     settingsKey: "setWordSpacing",
     allyMethod: setWordSpacing,
-    title: "Word Spacing",
+    title: "Wörter-Abstand",
     steps: 3,
   },
 ];
