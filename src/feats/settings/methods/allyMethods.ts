@@ -478,6 +478,7 @@ export const setLinkHighlight = ({
       }
     };
     ref.current?.injectJavaScript(`
+        const links = document.querySelectorAll('a');
 		    links.forEach((link) => {
 		       ${linkStyle(step ?? settingsState.activeStep)}
 		      }
